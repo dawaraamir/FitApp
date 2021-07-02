@@ -1,0 +1,75 @@
+<app-header></app-header>
+<h1>Exercise Library</h1>
+
+
+<div class="form-group" id="searchcomponent">
+  <select [(ngModel)]="searchValue" id="search" name="searchCategory" class="select" required>
+    <option value="undefined" selected disabled class="option">Filter by Category</option>
+    <option value="Chest">Chest</option>
+    <option value="Back">Back</option>
+    <option value="Biceps">Biceps</option>
+    <option value="Triceps">Triceps</option>
+    <option value="Shoulders">Shoulders</option>
+    <option value="Legs">Legs</option>
+    <option value="Abs">Abs</option>
+    <option value="Show All">Show All</option>
+  </select>
+</div>
+<ul class="responsive-table">
+  <li class="table-header">
+    <div class="col col-1">Exercise Name</div>
+    <div class="col col-2">Category</div>
+    <div class="col col-3">Sets</div>
+    <div class="col col-4">Reps</div>
+    <div class="col col-5"></div>
+  </li>
+  <li class="table-row" *ngFor="let exercise of exercises | searchfilter:searchValue">
+    <div class="col col-1" data-label="Exercise Name">{{ exercise.exerciseName }}</div>
+    <div class="col col-2" data-label="Category">{{ exercise.category }}</div>
+    <div class="col col-3" data-label="Sets">{{ exercise.sets }}</div>
+    <div class="col col-4" data-label="Reps">{{ exercise.reps }}</div>
+    <div class="col col-5"> <button (click)="viewExercise(exercise.id)" class="view">
+      View Details</button></div>
+  </li>
+</ul>
+<!-- <table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Exercise Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Description</th>
+      <th scope="col">Sets</th>
+      <th scope="col">Reps</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let exercise of exercises | searchfilter:searchValue">
+      <td>{{ exercise.exerciseName }}</td>
+      <td>{{ exercise.category }}</td>
+      <td>{{ exercise.description }}</td>
+      <td>{{ exercise.sets }}</td>
+      <td>{{ exercise.reps }}</td>
+      <td>
+        <button (click)="viewExercise(exercise.id)" class="view">
+          View Details</button>
+        <button (click)="deleteExercise(exercise.id)" class="delete">
+          Delete
+        </button>
+      </td>
+      <td>
+        <button (click)="editExercise(exercise.id)" class="edit">
+          Edit
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> -->
+
+<div>
+  <button type="button"  (click)="addExerciseButton()" class="btn btn-dark">
+    Add Exercise
+  </button>
+</div>
+
+<app-footer></app-footer>
+

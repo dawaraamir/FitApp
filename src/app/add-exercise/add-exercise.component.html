@@ -1,0 +1,125 @@
+<app-header></app-header>
+
+<div class="container">
+  <div class="signup-box">
+    <h2>Add Exercise</h2>
+    <form (ngSubmit)="submitExerciseButton()">
+      <div class="user-box">
+        <input  type="text"
+        required
+        [(ngModel)]="exercise.exerciseName"
+        name="name">
+        <label for="name">Exercise Name</label>
+      </div>
+      <div class="user-box">
+        <select name="category" id="category" class="form-control" required
+        [(ngModel)]="exercise.category"
+        name="category">
+        <option value="undefined" selected disabled class="option">Category</option>
+        <option value="Chest">Chest</option>
+        <option value="Back">Back</option>
+        <option value="Biceps">Biceps</option>
+        <option value="Triceps">Triceps</option>
+        <option value="Shoulders">Shoulders</option>
+        <option value="Legs">Legs</option>
+        <option value="Abs">Abs</option>
+      </select>
+        <!-- <label for="category"> Category</label> -->
+      </div>
+      <div class="user-box">
+        <input type="description"
+        class="form-control"
+        required
+        [(ngModel)]="exercise.description"
+        name="description">
+        <label for="description"> Description</label>
+      </div>
+      <div class="user-box">
+        <input type="number"
+        class="form-control"
+        required
+        [(ngModel)]="exercise.sets"
+        name="sets">
+        <label for="sets"> Sets</label>
+      </div>
+      <div class="user-box">
+        <input type="number"
+        class="form-control"
+        required
+        [(ngModel)]="exercise.reps"
+        name="reps">
+        <label for="reps"> Reps</label>
+      </div>
+      <button type="submit" class="submit">Submit</button>
+      <button type="button" class="cancelBtn" onclick="window.history.back();">Cancel</button>
+    </form>
+  </div>
+  </div>
+
+<!-- <div class="container">
+    <form (ngSubmit)="submitExerciseButton()">
+      <div class="form-group">
+        <label for="name">Exercise Name</label>
+        <input
+          type="text"
+          class="form-control"
+          required
+          [(ngModel)]="exercise.exerciseName"
+          name="name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="category"> Category</label>
+        <select name="category" id="category" class="form-control" required
+        [(ngModel)]="exercise.category"
+        name="category">
+          <option value="Chest">Chest</option>
+          <option value="Back">Back</option>
+          <option value="Biceps">Biceps</option>
+          <option value="Triceps">Triceps</option>
+          <option value="Shoulders">Shoulders</option>
+          <option value="Legs">Legs</option>
+          <option value="Abs">Abs</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="description"> Description</label>
+        <input
+          type="description"
+          class="form-control"
+          required
+          [(ngModel)]="exercise.description"
+          name="description"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="sets"> Sets</label>
+        <input
+          type="number"
+          class="form-control"
+          required
+          [(ngModel)]="exercise.sets"
+          name="sets"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="reps"> Reps</label>
+        <input
+          type="number"
+          class="form-control"
+          required
+          [(ngModel)]="exercise.reps"
+          name="reps"
+        />
+      </div>
+  
+      <button type="submit" class="submit">Submit</button>
+      <button type="button" class="cancelBtn" onclick="window.history.back();">Cancel</button>
+    </form>
+  </div> -->
+  <app-footer></app-footer>
+  

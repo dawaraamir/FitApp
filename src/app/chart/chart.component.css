@@ -1,0 +1,11 @@
+p{
+    text-align: right;
+    margin-right: 10px;
+}
+form, .subscribe:hover>div {
+	display: none;
+}
+
+.subscribe:hover>form {
+	display: block;
+}

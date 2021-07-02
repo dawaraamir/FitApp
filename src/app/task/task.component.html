@@ -1,0 +1,113 @@
+<div class="container">
+    <h2>Exercises</h2>
+  
+    <div
+      cdkDropList
+      #exercisesList="cdkDropList"
+      [cdkDropListData]="exercises"
+      [cdkDropListConnectedTo]="[sundayList, mondayList, tuesdayList, wednesdayList, thursdayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of exercises" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+  
+  <div class="calander">
+  <div class="example-container">
+    <h2>Sunday</h2>
+    <div
+      cdkDropList
+      #sundayList="cdkDropList"
+      [cdkDropListData]="sunday"
+      [cdkDropListConnectedTo]="[exercisesList, mondayList, tuesdayList, wednesdayList, thursdayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of sunday" cdkDrag>{{item}}</div>
+    </div>
+
+  <div class="example-container">
+    <h2>Monday</h2>
+  
+    <div
+      cdkDropList
+      #mondayList="cdkDropList"
+      [cdkDropListData]="monday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, tuesdayList, wednesdayList, thursdayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of monday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Tuesday</h2>
+  
+    <div
+      cdkDropList
+      #tuesdayList="cdkDropList"
+      [cdkDropListData]="tuesday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, mondayList, wednesdayList, thursdayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of tuesday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Wednesday</h2>
+  
+    <div
+      cdkDropList
+      #wednesdayList="cdkDropList"
+      [cdkDropListData]="wednesday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, tuesdayList, mondayList, thursdayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of wednesday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Thursday</h2>
+  
+    <div
+      cdkDropList
+      #thursdayList="cdkDropList"
+      [cdkDropListData]="thursday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, tuesdayList, wednesdayList, mondayList, fridayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of thursday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Friday</h2>
+  
+    <div
+      cdkDropList
+      #fridayList="cdkDropList"
+      [cdkDropListData]="friday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, tuesdayList, wednesdayList, thursdayList, mondayList, saturdayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of friday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Saturday</h2>
+  
+    <div
+      cdkDropList
+      #saturdayList="cdkDropList"
+      [cdkDropListData]="saturday"
+      [cdkDropListConnectedTo]="[exercisesList, sundayList, tuesdayList, wednesdayList, thursdayList, fridayList, mondayList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of saturday" cdkDrag>{{item}}</div>
+    </div>
+  </div>
+    </div>
+</div>
+  

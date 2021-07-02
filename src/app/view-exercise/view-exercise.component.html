@@ -1,0 +1,52 @@
+<app-header></app-header>
+<div class="row1-container">
+  <div class="box box-down cyan">
+    <h2>Exercise Name</h2>
+    <h4>{{exercise.exerciseName}}</h4>
+  </div>
+
+  <div class="box red">
+    <h2>Description</h2>
+    <p>{{exercise.description}}</p>
+
+  </div>
+
+  <div class="box box-down blue">
+    <h2>Sets/Reps</h2>
+    <p>Sets: {{exercise.sets}}</p>
+    <p>Reps: {{exercise.reps}}</p>
+  </div>
+</div>
+<div class="row2-container">
+    <img src="{{exercise.image}}" alt="">
+</div>
+<button routerLink="/exercise-list" class="btn btn-dark">Back</button>
+<!-- <div class="container">
+    <h2>View Details</h2>
+  
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Exercise Name</th>
+          <th scope="col">Category</th>
+          <th scope="col">Description</th>
+          <th scope="col">Sets</th>
+          <th scope="col">Reps</th>
+          <th scope="col">Demonstration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ exercise.exerciseName }}</td>
+          <td>{{ exercise.category }}</td>
+          <td>{{ exercise.description }}</td>
+          <td>{{ exercise.sets }}</td>
+          <td>{{ exercise.reps }}</td>
+          <td><img src="{{ exercise.image }}" alt=""></td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <button routerLink="/exercise-list">Back</button>
+  </div> -->
+  <app-footer></app-footer>
