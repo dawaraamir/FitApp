@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend: FastAPI",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "backend.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8080",
+        "--reload"
+      ],
+      "jinja": true,
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Backend: install dependencies"
+    },
+    {
+      "name": "Frontend: Angular",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "preLaunchTask": "Frontend: ng serve",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/src"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: Angular + FastAPI",
+      "configurations": [
+        "Backend: FastAPI",
+        "Frontend: Angular"
+      ]
+    }
+  ]
+}

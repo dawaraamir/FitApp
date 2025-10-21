@@ -17,12 +17,17 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submitUserButton(){
+  submitUserButton(): void {
     this.data.addUser(this.user).subscribe(
-      response =>{
-        this.router.navigate(['signed-in-landing-page']);
-      }
-    )
+      (response: User) => {
+        if (response && response.userId !== undefined && response.userId !== null) {
+          this.router.navigate(['signed-in-landing-page', response.userId]);
+        } else {
+          this.router.navigate(['signed-in-landing-page']);
+        }
+      },
+      error => console.error(error)
+    );
   }
 
 }

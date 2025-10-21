@@ -19,43 +19,61 @@ export class SignedInLandingPageComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.getUserById();
+    this.loadUsers();
     this.getAllExercises();
-
-    const userId = this.activatedRoute.snapshot.params[`userId`];
-
-    this.datas.fetchUserById(userId).subscribe(
-      response => {
-        this.user = response;
-      }
-    );
+    this.loadUserFromRoute();
   }
 
-  getUserById(){
+  loadUsers(): void {
     this.datas.fetchUser().subscribe(
       response => {
         this.users = response;
         console.log(this.users);
-      }
+      },
+      error => console.error(error)
     );
   }
 
-  getAllExercises(){
+  getAllExercises(): void {
     this.datas.fetchExercises().subscribe(
       response => {
         this.exercises = response;
         console.log(this.exercises);
-      }
+      },
+      error => console.error(error)
     );
   }
 
-  saveExercise(userId:number, user:User){
+  saveExercise(userId:number, user:User): void {
+    if (userId === undefined || userId === null) {
+      return;
+    }
+
     this.datas.editUser(userId, user).subscribe(
       response=>{
         this.router.navigate(['exercise-list']);
       },
-      error => console.log(error)
+      error => console.error(error)
     );
 }
+
+  private loadUserFromRoute(): void {
+    const param = this.activatedRoute.snapshot.paramMap.get('userId');
+    if (!param) {
+      return;
+    }
+
+    const userId = Number(param);
+    if (Number.isNaN(userId)) {
+      return;
+    }
+
+    this.datas.fetchUserById(userId).subscribe(
+      response => {
+        this.user = response;
+      },
+      error => console.error(error)
+    );
+  }
 
 }

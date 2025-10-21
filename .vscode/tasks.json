@@ -1,0 +1,112 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Frontend: install dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Frontend: ng serve",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "start"
+      ],
+      "isBackground": true,
+      "group": {
+        "kind": "build"
+      },
+      "options": {
+        "env": {
+          "NODE_OPTIONS": "--openssl-legacy-provider"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": {
+        "owner": "angular",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "pattern": [
+          {
+            "regexp": "^ERROR in (.+?)\\((\\d+),(\\d+)\\):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "message": 4
+          },
+          {
+            "regexp": "^(?:Error: )?(.+?):(\\d+):(\\d+) - ((?:error|warning) .+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "message": 4
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*Angular Live Development Server is listening on.*"
+        }
+      }
+    },
+    {
+      "label": "Backend: install dependencies",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "backend:install"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Backend: uvicorn",
+      "type": "shell",
+      "command": "uvicorn",
+      "args": [
+        "backend.main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8080",
+        "--reload"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "group": {
+        "kind": "build"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": {
+        "owner": "python",
+        "base": "$python",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*Reloading\.$",
+          "endsPattern": ".*Application startup complete.*"
+        }
+      }
+    }
+  ]
+}

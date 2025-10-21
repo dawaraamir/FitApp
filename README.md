@@ -1,27 +1,93 @@
-# FitnessApp
+# FitApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.1.
+FitApp is an Angular front-end paired with a lightweight FastAPI backend that manages users and exercises. The application lets members create an account, browse exercises, and maintain workout details.
 
-## Development server
+## Prerequisites
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- [Node.js](https://nodejs.org/) 16+ (includes `npm`)
+- [Python](https://www.python.org/) 3.9 or newer
 
-## Code scaffolding
+> If you are using Visual Studio Code, install the recommended extensions when prompted to enable Angular and Python tooling.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Project structure
 
-## Build
+```
+.
+├── backend/             # FastAPI application exposing /fit APIs
+├── src/                 # Angular client
+└── .vscode/             # Tasks and launch configurations for VS Code
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Installing dependencies
 
-## Running unit tests
+From the repository root:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm install
+npm run backend:install
+```
 
-## Running end-to-end tests
+The backend install script checks that `backend/requirements.txt` is present before invoking `pip`. If it reports that the file is missing, sync your checkout (e.g., `git pull --rebase`) so the new backend folder and its dependencies are available. Prefer to run the `python3 -m pip install -r backend/requirements.txt` command directly? You still can once the file exists.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Running the apps manually
 
-## Further help
+In two terminals:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm run start            # Serves the Angular client on http://localhost:4200
+npm run backend          # Boots the FastAPI server on http://localhost:8080
+```
+
+The front-end expects the backend at `http://localhost:8080/fit/...`. The FastAPI server ships with seed data so that the client has something to display immediately.
+
+## Using Visual Studio Code
+
+The repository contains ready-made tasks and launch configurations:
+
+- **Tasks** (`Terminal → Run Task…`)
+  - `Frontend: install dependencies`
+  - `Frontend: ng serve`
+  - `Backend: install dependencies`
+  - `Backend: uvicorn`
+- **Launch configurations** (`Run and Debug` side bar)
+  - `Backend: FastAPI` — starts the Python server with hot reload
+  - `Frontend: Angular` — launches Chrome against the Angular dev server
+  - `Full Stack: Angular + FastAPI` — runs both configurations together
+
+Running the compound launch will install dependencies (if needed), start the backend, start the Angular dev server, and attach the Chrome debugger.
+
+## Developing with IntelliJ IDEA (optional)
+
+If you prefer IntelliJ IDEA for backend work, install the Python plugin and use the `backend/main.py` module as a run configuration. The backend has no additional IDE requirements beyond creating a standard Python run/debug configuration that executes:
+
+```
+uvicorn backend.main:app --host 0.0.0.0 --port 8080 --reload
+```
+
+## Testing
+
+- Run `ng test` for Angular unit tests.
+- Add Python tests as the backend evolves (none are bundled yet).
+
+## API overview
+
+All endpoints are namespaced under `/fit`:
+
+| Method | Endpoint                    | Description                     |
+| ------ | --------------------------- | ------------------------------- |
+| GET    | `/fit/exercise`             | List exercises                  |
+| POST   | `/fit/exercise`             | Create a new exercise           |
+| GET    | `/fit/exercise/{id}`        | Retrieve a specific exercise    |
+| PUT    | `/fit/exercise/{id}`        | Update an exercise              |
+| DELETE | `/fit/exercise/{id}`        | Delete an exercise              |
+| GET    | `/fit/user`                 | List users                      |
+| POST   | `/fit/user`                 | Create a new user               |
+| GET    | `/fit/user/{userId}`        | Retrieve a specific user        |
+| PUT    | `/fit/user/{userId}`        | Update a user                   |
+| DELETE | `/fit/user/{userId}`        | Delete a user                   |
+
+The FastAPI application seeds a sample member and exercises to make the UI functional right after launching both services.
+
+## Deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for steps to fast-forward and push the `main` branch after your changes are reviewed.
