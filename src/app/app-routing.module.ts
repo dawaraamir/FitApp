@@ -6,6 +6,7 @@ import { ChartComponent } from './chart/chart.component';
 import { EditExerciseComponent } from './edit-exercise/edit-exercise.component';
 import { ExerciseListComponent } from './exercise-list/exercise-list.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { CoachProfileComponent } from './coach-profile/coach-profile.component';
 import { SignedInLandingPageComponent } from './signed-in-landing-page/signed-in-landing-page.component';
 import { SignupComponent } from './signup/signup.component';
 import { TaskComponent } from './task/task.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'signed-in-landing-page/:userId', component: SignedInLandingPageComponent },
   { path: 'signed-in-landing-page', component: SignedInLandingPageComponent },
+  { path: 'coach-profile', component: CoachProfileComponent },
   { path: 'chart', component: ChartComponent },
   { path: 'task', component: TaskComponent },
   { path: '**', redirectTo: 'landing-page', pathMatch: 'full' }

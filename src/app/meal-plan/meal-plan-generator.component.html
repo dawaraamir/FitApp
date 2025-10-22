@@ -1,0 +1,115 @@
+<div class="meal-plan-container">
+  <mat-card class="controls-card">
+    <form [formGroup]="form" (ngSubmit)="generate()">
+      <h2>Create a smarter meal lineup</h2>
+      <p class="intro">
+        Dial in your nutritional focus and we’ll suggest macro-aware meals that complement your weekly
+        training plan.
+      </p>
+
+      <div class="form-grid">
+        <mat-form-field appearance="fill">
+          <mat-label>Primary goal</mat-label>
+          <mat-select formControlName="goal">
+            <mat-option *ngFor="let option of goals" [value]="option.value">{{ option.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Daily calorie target</mat-label>
+          <input matInput type="number" formControlName="calories" placeholder="2200" />
+          <span matSuffix>kcal</span>
+          <mat-hint align="end">Optional</mat-hint>
+          <mat-error *ngIf="form.get('calories')?.hasError('min')">Minimum 1200 calories</mat-error>
+          <mat-error *ngIf="form.get('calories')?.hasError('max')">Maximum 4500 calories</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Dietary preference</mat-label>
+          <mat-select formControlName="diet">
+            <mat-option *ngFor="let option of diets" [value]="option.value">{{ option.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Plan length (days)</mat-label>
+          <mat-select formControlName="days">
+            <mat-option *ngFor="let option of dayOptions" [value]="option">{{ option }} days</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-raised-button color="accent" type="submit" [disabled]="loading">Generate meal plan</button>
+        <span class="hint">Plans include breakfast, lunch, dinner, and a recovery snack.</span>
+      </div>
+    </form>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate" color="accent"></mat-progress-bar>
+    <div *ngIf="errorMessage" class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </mat-card>
+
+  <ng-container *ngIf="plan as current">
+    <section class="summary-section" *ngIf="summary as details">
+      <mat-card class="summary-card">
+        <div class="stat">
+          <span class="label">Daily target</span>
+          <div class="value">{{ details.targetCalories | number }} kcal</div>
+          <p>Aligned to your {{ goalLabel(details.goal) | lowercase }} focus.</p>
+        </div>
+        <div class="stat">
+          <span class="label">Hydration</span>
+          <div class="value">{{ details.hydrationCups }} cups</div>
+          <p>Approx. {{ details.hydrationCups * 250 | number }}ml across the day.</p>
+        </div>
+        <div class="highlight-chips">
+          <mat-chip *ngFor="let highlight of details.highlights">{{ highlight }}</mat-chip>
+        </div>
+      </mat-card>
+
+      <mat-card class="tips-card">
+        <h3>Daily coaching cues</h3>
+        <ul>
+          <li *ngFor="let tip of details.tips">{{ tip }}</li>
+        </ul>
+      </mat-card>
+    </section>
+
+    <section class="day-grid">
+      <mat-card class="day-card" *ngFor="let day of current.days; trackBy: trackByDay">
+        <header>
+          <div class="day-label">
+            <span class="chip">{{ day.day }}</span>
+            <h3>{{ day.focus }}</h3>
+          </div>
+          <div class="day-total">{{ day.totalCalories | number }} kcal</div>
+        </header>
+        <mat-divider></mat-divider>
+
+        <div class="meal-list">
+          <div class="meal-item" *ngFor="let meal of day.meals; trackBy: trackByMeal">
+            <div class="icon">
+              <mat-icon>{{ iconForMealType(meal) }}</mat-icon>
+            </div>
+            <div class="details">
+              <div class="title">{{ meal.mealType }} · {{ meal.name }}</div>
+              <p>{{ meal.description }}</p>
+              <div class="meta">
+                <span>{{ meal.calories }} kcal</span>
+                <span>{{ meal.protein }}g protein</span>
+                <span>{{ meal.carbs }}g carbs</span>
+                <span>{{ meal.fat }}g fat</span>
+                <span>{{ meal.prepTime }} min prep</span>
+              </div>
+              <div class="tags" *ngIf="meal.tags.length">
+                <mat-chip *ngFor="let tag of meal.tags">{{ tag }}</mat-chip>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </section>
+  </ng-container>
+</div>

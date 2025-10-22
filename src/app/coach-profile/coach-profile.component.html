@@ -1,0 +1,224 @@
+<div class="profile-shell">
+  <mat-card class="form-card">
+    <header>
+      <h1>Tell Dawar Power about your rhythm</h1>
+      <p>The more details you share, the better the coach can slot workouts, adjust meals, and keep you consistent without guesswork.</p>
+    </header>
+
+    <app-quick-start-presets (presetApplied)="onPresetApplied()"></app-quick-start-presets>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="profile-form">
+      <div class="form-grid">
+        <mat-form-field appearance="fill">
+          <mat-label>Full name</mat-label>
+          <input matInput formControlName="fullName" placeholder="Jordan Lee" />
+          <mat-error *ngIf="form.get('fullName')?.hasError('required')">Name is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Occupation / role</mat-label>
+          <input matInput formControlName="occupation" placeholder="Product manager @ Skyline" />
+          <mat-error *ngIf="form.get('occupation')?.hasError('required')">Occupation helps us match your energy demands.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Work style</mat-label>
+          <mat-select formControlName="workStyle">
+            <mat-option *ngFor="let option of workStyles; trackBy: trackByValue" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Primary time zone</mat-label>
+          <input matInput formControlName="timezone" placeholder="EST / UTC-5" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Primary goal</mat-label>
+          <mat-select formControlName="goal">
+            <mat-option *ngFor="let option of goalOptions; trackBy: trackByValue" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Daily calorie target (optional)</mat-label>
+          <input matInput type="number" formControlName="calorieTarget" placeholder="2200" />
+          <span matSuffix>kcal</span>
+          <mat-hint align="end">Leave blank to let the coach estimate.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Height (cm)</mat-label>
+          <input matInput type="number" formControlName="heightCm" placeholder="180" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Weight (kg)</mat-label>
+          <input matInput type="number" formControlName="weightKg" placeholder="78" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" placeholder="33" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let option of genderOptions; trackBy: trackByValue" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Current activity level</mat-label>
+          <mat-select formControlName="activityLevel">
+            <mat-option *ngFor="let option of activityOptions; trackBy: trackByValue" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Preferred training windows</mat-label>
+          <mat-select formControlName="preferredWindows" multiple>
+            <mat-option *ngFor="let window of windowsOptions; trackBy: trackByValue" [value]="window.value">
+              {{ window.label }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Select all that routinely work. The coach will prioritize these blocks.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Equipment on hand</mat-label>
+          <mat-select formControlName="equipmentAccess" multiple>
+            <mat-option *ngFor="let gear of equipmentOptions; trackBy: trackByValue" [value]="gear.value">
+              {{ gear.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Dietary preference</mat-label>
+          <mat-select formControlName="dietPreference">
+            <mat-option *ngFor="let option of dietOptions; trackBy: trackByValue" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Average commute minutes (optional)</mat-label>
+          <input matInput type="number" formControlName="commuteMinutes" placeholder="45" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Stress load lately</mat-label>
+          <mat-select formControlName="stressLevel">
+            <mat-option *ngFor="let option of stressOptions; trackBy: trackByValue" [value]="option.value">
+              {{ option.label | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Injuries or conditions</mat-label>
+          <textarea matInput formControlName="injuries" rows="2" placeholder="Right knee soreness, mild asthma"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Dietary restrictions</mat-label>
+          <input matInput formControlName="dietaryRestrictions" placeholder="e.g. shellfish, dairy" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Allergies</mat-label>
+          <input matInput formControlName="dietaryAllergies" placeholder="e.g. peanuts" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Food preferences</mat-label>
+          <textarea matInput formControlName="dietaryPreferences" rows="2" placeholder="Loves Mediterranean flavors, dislikes mushrooms"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Current supplements</mat-label>
+          <input matInput formControlName="supplements" placeholder="Multivitamin, creatine" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Short-term weight goal</mat-label>
+          <input matInput formControlName="weightGoalShort" placeholder="Lose 5 lbs in 8 weeks" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Long-term weight goal</mat-label>
+          <input matInput formControlName="weightGoalLong" placeholder="Maintain lean muscle year-round" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Notes for your coach (travel, injuries, preferences)</mat-label>
+          <textarea matInput formControlName="notes" rows="3" placeholder="Traveling twice a month, low back sensitive to heavy deadlifts..."></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="actions">
+        <button mat-raised-button color="accent" type="submit" [disabled]="saving">Save profile</button>
+        <button mat-stroked-button type="button" (click)="clearProfile()">Clear</button>
+      </div>
+    </form>
+    <mat-progress-bar *ngIf="saving" mode="indeterminate" color="accent"></mat-progress-bar>
+  </mat-card>
+
+  <mat-card class="summary-card" *ngIf="savedProfile as profile">
+    <h2>Your Dawar Power blueprint</h2>
+    <p class="timestamp">Last updated {{ profile.lastUpdated | date:'medium' }}</p>
+    <div class="summary-grid">
+      <div>
+        <h3>Identity</h3>
+        <p>{{ profile.fullName }} • {{ profile.occupation }}</p>
+        <p>Work style: {{ profile.workStyle | titlecase }} • Timezone: {{ profile.timezone }}</p>
+      </div>
+      <div>
+        <h3>Goal posts</h3>
+        <p>Primary goal: {{ profile.goal | titlecase }}</p>
+        <p *ngIf="profile.calorieTarget">Calorie target: {{ profile.calorieTarget }} kcal</p>
+        <p *ngIf="profile.heightCm && profile.weightKg">Metrics: {{ profile.heightCm }}cm • {{ profile.weightKg }}kg</p>
+        <p *ngIf="profile.age">Age: {{ profile.age }}</p>
+        <p *ngIf="profile.gender">Gender: {{ profile.gender | titlecase }}</p>
+        <p *ngIf="profile.weightGoalShort">Short-term goal: {{ profile.weightGoalShort }}</p>
+        <p *ngIf="profile.weightGoalLong">Long-term goal: {{ profile.weightGoalLong }}</p>
+      </div>
+      <div>
+        <h3>Scheduling DNA</h3>
+        <p *ngIf="profile.preferredWindows.length; else noWindows">
+          Prefers: {{ preferredWindowsSummary(profile) }}
+        </p>
+        <ng-template #noWindows>
+          <p>We’ll explore the best times based on your calendar activity.</p>
+        </ng-template>
+        <p *ngIf="profile.activityLevel">Activity level: {{ profile.activityLevel | titlecase }}</p>
+        <p *ngIf="profile.commuteMinutes !== null">Commute: ~{{ profile.commuteMinutes }} mins</p>
+      </div>
+      <div>
+        <h3>Training inputs</h3>
+        <p>Equipment: {{ equipmentSummary(profile) }}</p>
+        <p>Diet: {{ profile.dietPreference | titlecase }}</p>
+        <p>Stress level: {{ profile.stressLevel | titlecase }}</p>
+        <p *ngIf="profile.injuries">Injuries: {{ profile.injuries }}</p>
+        <p *ngIf="profile.dietaryRestrictions">Restrictions: {{ profile.dietaryRestrictions }}</p>
+        <p *ngIf="profile.dietaryAllergies">Allergies: {{ profile.dietaryAllergies }}</p>
+        <p *ngIf="profile.supplements">Supplements: {{ profile.supplements }}</p>
+      </div>
+    </div>
+    <div class="coaching-note" *ngIf="profile.notes">
+      <h3>Coach notes</h3>
+      <p>{{ profile.notes }}</p>
+    </div>
+  </mat-card>
+</div>

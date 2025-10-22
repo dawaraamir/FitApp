@@ -1,4 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global base styles */
+html,
+body {
+  height: 100%;
+  background: #f5f7fb;
+  color: #1f2a37;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Inter', 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.mat-toolbar.mat-primary {
+  --mat-toolbar-container-background-color: #ffffff;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button {
+  border-radius: 999px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.mat-mdc-stroked-button {
+  border-radius: 999px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.mat-mdc-card {
+  border-radius: 20px;
+  background: #ffffff;
+  color: inherit;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.mat-mdc-text-field-wrapper {
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.mat-mdc-form-field-label {
+  color: #5b6b8c !important;
+}
+
+.mat-mdc-form-field-input-control {
+  color: #1f2a37 !important;
+}
+
+.mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-subscript-wrapper {
+  color: #5b6b8c !important;
+}
+
+.mat-mdc-select-value {
+  color: #1f2a37 !important;
+}

@@ -1,24 +1,38 @@
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
-        </button>
-        <a class="navbar-brand" routerLink="/landing-page">FIT LIBRARY</a>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li><a routerLink="/exercise-list">Exercise Library</a></li>
-          <li><a routerLink="/add-exercise">Add Exercise</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a routerLink="/about-page"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a routerLink="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-          </ul>
-      </div>
-    </div>
+<mat-toolbar color="primary" class="app-toolbar">
+  <button mat-icon-button class="mobile-toggle" (click)="toggleMenu()">
+    <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+
+  <div class="brand" routerLink="/landing-page" (click)="closeMenu()">
+    <span class="brand-mark">Dawar</span><span class="brand-trail">Power</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/landing-page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+    <a mat-button routerLink="/signed-in-landing-page" routerLinkActive="active" (click)="closeMenu()">Smart Coach</a>
+    <a mat-button routerLink="/coach-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
+    <a mat-button routerLink="/exercise-list" routerLinkActive="active" (click)="closeMenu()">Movement Library</a>
+    <a mat-button routerLink="/add-exercise" routerLinkActive="active" (click)="closeMenu()">Add Movement</a>
+    <a mat-button routerLink="/about-page" routerLinkActive="active" (click)="closeMenu()">About</a>
   </nav>
+
+  <div class="auth-cta">
+    <a mat-stroked-button color="accent" routerLink="/signup" (click)="closeMenu()">Start Coaching</a>
+  </div>
+</mat-toolbar>
+
+<div class="mobile-backdrop" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+
+<nav class="mobile-drawer" [class.open]="isMenuOpen">
+  <mat-nav-list>
+    <a mat-list-item routerLink="/landing-page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+    <a mat-list-item routerLink="/signed-in-landing-page" routerLinkActive="active" (click)="closeMenu()">Smart Coach</a>
+    <a mat-list-item routerLink="/coach-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
+    <a mat-list-item routerLink="/exercise-list" routerLinkActive="active" (click)="closeMenu()">Movement Library</a>
+    <a mat-list-item routerLink="/add-exercise" routerLinkActive="active" (click)="closeMenu()">Add Movement</a>
+    <a mat-list-item routerLink="/about-page" routerLinkActive="active" (click)="closeMenu()">About</a>
+    <a mat-list-item routerLink="/signup" routerLinkActive="active" (click)="closeMenu()">Start Coaching</a>
+  </mat-nav-list>
+</nav>

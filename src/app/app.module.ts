@@ -8,7 +8,7 @@ import { EditExerciseComponent } from './edit-exercise/edit-exercise.component';
 import { ExerciseListComponent } from './exercise-list/exercise-list.component';
 import { ViewExerciseComponent } from './view-exercise/view-exercise.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -16,12 +16,28 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { SearchfilterPipe } from './searchfilter.pipe';
 import { SignupComponent } from './signup/signup.component';
 import { SignedInLandingPageComponent } from './signed-in-landing-page/signed-in-landing-page.component';
-import { ChartModule } from 'angular2-chartjs';
 import { ChartComponent } from './chart/chart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TaskComponent } from './task/task.component';
+import { MealPlanGeneratorComponent } from './meal-plan/meal-plan-generator.component';
+import { CoachProfileComponent } from './coach-profile/coach-profile.component';
+import { WellnessSyncComponent } from './wellness-sync/wellness-sync.component';
+import { QuickStartPresetsComponent } from './quick-start-presets/quick-start-presets.component';
 
 @NgModule({
   declarations: [
@@ -38,17 +54,34 @@ import { TaskComponent } from './task/task.component';
     SignupComponent,
     SignedInLandingPageComponent,
     ChartComponent,
-    TaskComponent
+    TaskComponent,
+    MealPlanGeneratorComponent,
+    CoachProfileComponent,
+    WellnessSyncComponent,
+    QuickStartPresetsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ChartModule,
     BrowserAnimationsModule,
     MatCardModule,
-    DragDropModule
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatTooltipModule,
+    DragDropModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

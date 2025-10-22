@@ -1,0 +1,116 @@
+.profile-shell {
+  display: grid;
+  gap: 28px;
+}
+
+.form-card {
+  background: #ffffff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+  border-radius: 20px;
+  padding: 28px;
+}
+
+app-quick-start-presets {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.form-card header h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.form-card header p {
+  margin: 0 0 24px;
+  color: #425466;
+  max-width: 680px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.form-card {
+  background: #ffffff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+  padding: 28px;
+  border-radius: 20px;
+}
+
+.form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.summary-card {
+  padding: 32px;
+  display: grid;
+  gap: 20px;
+  background: #ffffff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+  border-radius: 20px;
+}
+
+.summary-card h2 {
+  margin: 0;
+}
+
+.timestamp {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5b6b8c;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.summary-grid h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.summary-grid p {
+  margin: 4px 0;
+  color: #425466;
+}
+
+.coaching-note {
+  background: #f0f4ff;
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+
+.coaching-note h3 {
+  margin: 0 0 8px;
+}
+
+.coaching-note p {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .form-card {
+    padding: 24px;
+  }
+
+  .summary-card {
+    padding: 24px;
+  }
+}

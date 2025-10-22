@@ -1,75 +1,83 @@
-<app-header></app-header>
-<h1>Exercise Library</h1>
+<section class="list-header">
+  <div class="list-heading">
+    <h1>Exercise Library</h1>
+    <p>Search curated movements, filter by focus, and drop them into your weekly planner.</p>
+  </div>
+  <button mat-raised-button color="accent" (click)="addExerciseButton()">Add exercise</button>
+</section>
 
+<section class="filter-bar">
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Search exercises</mat-label>
+    <input
+      matInput
+      type="search"
+      [value]="searchTerm"
+      (input)="updateSearchTerm($any($event.target).value)"
+      placeholder="Try “pull” or “glutes”"
+    />
+    <button
+      *ngIf="searchTerm"
+      mat-icon-button
+      matSuffix
+      type="button"
+      aria-label="Clear search"
+      (click)="updateSearchTerm('')"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
 
-<div class="form-group" id="searchcomponent">
-  <select [(ngModel)]="searchValue" id="search" name="searchCategory" class="select" required>
-    <option value="undefined" selected disabled class="option">Filter by Category</option>
-    <option value="Chest">Chest</option>
-    <option value="Back">Back</option>
-    <option value="Biceps">Biceps</option>
-    <option value="Triceps">Triceps</option>
-    <option value="Shoulders">Shoulders</option>
-    <option value="Legs">Legs</option>
-    <option value="Abs">Abs</option>
-    <option value="Show All">Show All</option>
-  </select>
-</div>
-<ul class="responsive-table">
-  <li class="table-header">
-    <div class="col col-1">Exercise Name</div>
-    <div class="col col-2">Category</div>
-    <div class="col col-3">Sets</div>
-    <div class="col col-4">Reps</div>
-    <div class="col col-5"></div>
-  </li>
-  <li class="table-row" *ngFor="let exercise of exercises | searchfilter:searchValue">
-    <div class="col col-1" data-label="Exercise Name">{{ exercise.exerciseName }}</div>
-    <div class="col col-2" data-label="Category">{{ exercise.category }}</div>
-    <div class="col col-3" data-label="Sets">{{ exercise.sets }}</div>
-    <div class="col col-4" data-label="Reps">{{ exercise.reps }}</div>
-    <div class="col col-5"> <button (click)="viewExercise(exercise.id)" class="view">
-      View Details</button></div>
-  </li>
-</ul>
-<!-- <table class="table table-dark">
-  <thead>
-    <tr>
-      <th scope="col">Exercise Name</th>
-      <th scope="col">Category</th>
-      <th scope="col">Description</th>
-      <th scope="col">Sets</th>
-      <th scope="col">Reps</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let exercise of exercises | searchfilter:searchValue">
-      <td>{{ exercise.exerciseName }}</td>
-      <td>{{ exercise.category }}</td>
-      <td>{{ exercise.description }}</td>
-      <td>{{ exercise.sets }}</td>
-      <td>{{ exercise.reps }}</td>
-      <td>
-        <button (click)="viewExercise(exercise.id)" class="view">
-          View Details</button>
-        <button (click)="deleteExercise(exercise.id)" class="delete">
-          Delete
-        </button>
-      </td>
-      <td>
-        <button (click)="editExercise(exercise.id)" class="edit">
-          Edit
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table> -->
+  <div class="category-chips">
+    <mat-chip-list aria-label="Exercise categories">
+      <mat-chip
+        *ngFor="let category of categories"
+        [selected]="selectedCategory === category.value"
+        (click)="selectCategory(category.value)"
+        selectable
+        [removable]="false"
+        [disableRipple]="false"
+        [ngClass]="{ active: selectedCategory === category.value }"
+      >
+        {{ category.label }}
+      </mat-chip>
+    </mat-chip-list>
+    <button mat-button type="button" (click)="clearFilters()" class="clear-button">
+      <mat-icon>refresh</mat-icon>
+      Reset filters
+    </button>
+  </div>
+</section>
 
-<div>
-  <button type="button"  (click)="addExerciseButton()" class="btn btn-dark">
-    Add Exercise
-  </button>
-</div>
+<section class="exercise-grid">
+  <mat-card class="exercise-card" *ngFor="let exercise of filteredExercises">
+    <div class="card-heading">
+      <div>
+        <h2>{{ exercise.exerciseName }}</h2>
+        <mat-chip class="category-chip" color="primary" selected>{{ exercise.category }}</mat-chip>
+      </div>
+      <button mat-icon-button [matTooltip]="'Delete exercise'" (click)="deleteExercise(exercise.id)">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+    <p class="description">{{ exercise.description }}</p>
 
-<app-footer></app-footer>
+    <div class="meta">
+      <span><strong>{{ exercise.sets }}</strong> sets</span>
+      <span><strong>{{ exercise.reps }}</strong> reps</span>
+    </div>
 
+    <mat-card-actions>
+      <button mat-button color="accent" (click)="viewExercise(exercise.id)">View details</button>
+      <span class="spacer"></span>
+      <button mat-stroked-button color="primary" (click)="editExercise(exercise.id)">Edit</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div class="empty-state" *ngIf="filteredExercises.length === 0">
+    <mat-icon fontIcon="search_off"></mat-icon>
+    <h3>No exercises match that filter</h3>
+    <p>Try adjusting the focus area or clearing the search to see every movement again.</p>
+    <button mat-raised-button color="accent" (click)="clearFilters()">Reset filters</button>
+  </div>
+</section>

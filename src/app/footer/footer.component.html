@@ -1,10 +1,30 @@
-<div class="footer-dark">
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col item social"><a href="https://www.linkedin.com/in/dawaraamir97/" target="_blank"><i class="icon ion-social-linkedin"></i></a><a href="https://github.com/dawaraamir" target="_blank"><i class="icon ion-social-github"></i></a><a href="https://dawaraamir.github.io/Dawar-Aamir-Portfolio/" target="_blank"><i class="icon ion-paperclip"></i></a></div>
-            </div>
-            <p class="copyright">DawarPower © 2021</p>
-        </div>
-    </footer>
-</div>
+<footer class="app-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="brand-mark">Dawar Power</div>
+      <p>AI-powered fitness and nutrition that adapts to your busiest days.</p>
+    </div>
+    <nav class="footer-links">
+      <a routerLink="/landing-page">Home</a>
+      <a routerLink="/signed-in-landing-page">Smart Coach</a>
+      <a routerLink="/coach-profile">My Profile</a>
+      <a routerLink="/exercise-list">Movement Library</a>
+      <a routerLink="/about-page">About</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/dawaraamir97/" target="_blank" rel="noopener">
+        <mat-icon fontIcon="work_outline"></mat-icon>
+        LinkedIn
+      </a>
+      <a href="https://github.com/dawaraamir" target="_blank" rel="noopener">
+        <mat-icon fontIcon="code"></mat-icon>
+        GitHub
+      </a>
+      <a href="https://dawaraamir.github.io/Dawar-Aamir-Portfolio/" target="_blank" rel="noopener">
+        <mat-icon fontIcon="public"></mat-icon>
+        Portfolio
+      </a>
+    </div>
+  </div>
+  <div class="footer-meta">© {{ currentYear }} Dawar Power. Crafted by Dawar Aamir.</div>
+</footer>

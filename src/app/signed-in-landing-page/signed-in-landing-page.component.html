@@ -1,43 +1,166 @@
-<app-header></app-header>
-<div class="tabset">
-    <!-- Tab 1 -->
-    <input type="radio" name="tabset" id="tab1" aria-controls="Exercise Planner" checked>
-    <label for="tab1">Exercise Planner</label>
-    <!-- Tab 2 -->
-    <input type="radio" name="tabset" id="tab2" aria-controls="Calorie Counter">
-    <label for="tab2">Calorie Counter</label>
-    <!-- Tab 3 -->
-    <!-- <input type="radio" name="tabset" id="tab3" aria-controls="Macros Info">
-    <label for="tab3">Macros Info</label> -->
-    
-    <div class="tab-panels">
-      <section id="Exercise Planner" class="tab-panel">
-        <app-task></app-task>
-    </section>
-      <section id="Calorie Counter" class="tab-panel">
-        <div class="form-group">
-            <iframe src="https://www.mealpro.net/calorie/?color=232323" frameborder="0" width=100% height="1000" style="max-width: 100%"></iframe>
+<div class="dashboard-shell">
+  <ng-container *ngIf="profile$ | async as profile; else defaultDashboard">
+    <ng-container *ngIf="schedule$ | async as schedule; else loadingSchedule">
+      <section class="dashboard-hero">
+        <div class="hero-copy">
+          <h1>Hi {{ firstName(profile) }}, here&apos;s your {{ goalLabel(profile) }} layout.</h1>
+          <p>{{ schedule?.notes?.summary }}</p>
+        </div>
+        <div class="hero-stats">
+          <mat-card class="stat-card">
+            <mat-icon>event_available</mat-icon>
+            <div>
+              <span class="value">{{ profile.workStyle | titlecase }}</span>
+              <span class="label">{{ windowSummary(profile) }}</span>
             </div>
+          </mat-card>
+          <mat-card class="stat-card">
+            <mat-icon>fitness_center</mat-icon>
+            <div>
+              <span class="value">{{ profile.equipmentAccess.length ? profile.equipmentAccess.length : 'Adaptive' }}</span>
+              <span class="label">{{ equipmentSummary(profile) }}</span>
+            </div>
+          </mat-card>
+          <mat-card class="stat-card">
+            <mat-icon>restaurant</mat-icon>
+            <div>
+              <span class="value">{{ dietSummary(profile) | titlecase }}</span>
+              <span class="label">{{ profile.calorieTarget ? profile.calorieTarget + ' kcal daily' : 'Coach auto-adjusts macros' }}</span>
+            </div>
+          </mat-card>
+        </div>
       </section>
-      <!-- <section id="Macros Info" class="tab-panel">
-        <app-chart></app-chart>
-      </section> -->
-    </div>
-    
-  </div>
-<!-- <ul class="responsive-table">
-    <li class="table-header">
-      <div class="col col-1">Exercise Name</div>
-      <div class="col col-2">Save Exercise</div>
-    </li>
-    <li class="table-row" *ngFor="let exercise of exercises">
-      <div class="col col-1" data-label="Exercise Name">{{ exercise.exerciseName }}</div>
-      <div class="col col-2" (ngSubmit)="saveExercise(user.userId, user)">
-        <button type="submit" class="view">
-        Save</button></div>
-    </li>
-  </ul>
-<div class="form-group">
-<iframe src="https://www.mealpro.net/calorie/?color=232323" frameborder="0" width=100% height="1000" style="max-width: 100%"></iframe>
-</div> -->
-<app-footer></app-footer>
+
+      <section class="schedule-card">
+        <mat-card>
+          <h3>This week&apos;s coach picks</h3>
+          <p>{{ schedule?.notes?.recoveryTip }}</p>
+          <div class="schedule-list">
+            <div class="schedule-row" *ngFor="let session of schedule?.sessions">
+              <div class="day">{{ session.day }}</div>
+              <div class="window">{{ session.window }}</div>
+              <div class="focus">{{ session.focus }}</div>
+              <div class="meta">{{ session.durationMinutes }} min · {{ session.equipment }} · {{ session.intensity | titlecase }}</div>
+            </div>
+          </div>
+        </mat-card>
+      </section>
+
+      <section class="insight-cards">
+        <mat-card class="insight-card">
+          <h3>Weekly anchor</h3>
+          <p>We keep {{ windowSummary(profile) }} as your prime windows and flag alternates if meetings appear.</p>
+        </mat-card>
+        <mat-card class="insight-card">
+          <h3>Nutrition focus</h3>
+          <p>{{ schedule?.notes?.mealAlignment }}</p>
+        </mat-card>
+        <mat-card class="insight-card">
+          <h3>Recovery cues</h3>
+          <p>Stress trend: {{ profile.stressLevel | titlecase }}. Expect breath work, walks, and recovery prompts accordingly.</p>
+        </mat-card>
+      </section>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loadingSchedule>
+    <section class="dashboard-hero">
+      <div class="hero-copy">
+        <h1>Building your plan…</h1>
+        <p>Hang tight while Dawar Power maps workouts around your calendar.</p>
+      </div>
+    </section>
+  </ng-template>
+
+  <ng-template #defaultDashboard>
+    <section class="dashboard-hero">
+      <div class="hero-copy">
+        <h1>Dial in your training week</h1>
+        <p>Mix strength, conditioning, and recovery blocks while keeping nutrition aligned with the work ahead.</p>
+      </div>
+      <div class="hero-stats">
+        <mat-card class="stat-card">
+          <mat-icon>fitness_center</mat-icon>
+          <div>
+            <span class="value">{{ exercises?.length || 0 }}</span>
+            <span class="label">movements in your library</span>
+          </div>
+        </mat-card>
+        <mat-card class="stat-card">
+          <mat-icon>groups</mat-icon>
+          <div>
+            <span class="value">{{ users?.length || 0 }}</span>
+            <span class="label">athletes synced</span>
+          </div>
+        </mat-card>
+        <mat-card class="stat-card">
+          <mat-icon>water_drop</mat-icon>
+          <div>
+            <span class="value">Stay hydrated</span>
+            <span class="label">Sip every 90 minutes</span>
+          </div>
+        </mat-card>
+      </div>
+    </section>
+
+    <section class="insight-cards">
+      <mat-card class="insight-card">
+        <h3>Weekly anchor</h3>
+        <p>Start with two full-body strength days, layer in 1–2 conditioning sessions, and save one day for dedicated mobility.</p>
+      </mat-card>
+      <mat-card class="insight-card">
+        <h3>Recovery cues</h3>
+        <ul>
+          <li>Sleep 7.5+ hours and dim screens 60 minutes pre-bed.</li>
+          <li>Stack a protein-forward snack within 45 minutes after lifting.</li>
+          <li>Log perceived exertion so you can auto-regulate volume.</li>
+        </ul>
+      </mat-card>
+      <mat-card class="insight-card">
+        <h3>Upcoming focus</h3>
+        <p>Build power on mid-week sessions—alternate hinge + plyo pairings with endurance finishers.</p>
+      </mat-card>
+    </section>
+
+    <section class="preset-section">
+      <h2>Quick start plans</h2>
+      <p>Select a preset to let Dawar Power show what a smart week feels like. You can personalize later.</p>
+      <app-quick-start-presets (presetApplied)="loadUsers()"></app-quick-start-presets>
+    </section>
+  </ng-template>
+
+  <mat-tab-group animationDuration="250ms">
+    <mat-tab label="Workout planner">
+      <div class="tab-panel">
+        <ng-container *ngIf="schedule$ | async as schedule; else basicPlanner">
+          <app-task
+            [recommendedSessions]="schedule?.sessions || []"
+            [scheduleSummary]="schedule?.notes?.summary || ''"
+          ></app-task>
+        </ng-container>
+        <ng-template #basicPlanner>
+          <app-task></app-task>
+        </ng-template>
+      </div>
+    </mat-tab>
+    <mat-tab label="Meal planning">
+      <div class="tab-panel">
+        <app-meal-plan-generator></app-meal-plan-generator>
+      </div>
+    </mat-tab>
+    <mat-tab label="Calorie calculator">
+      <div class="tab-panel">
+        <div class="iframe-wrapper">
+          <iframe
+            src="https://www.mealpro.net/calorie/?color=232323"
+            title="Calorie calculator"
+            frameborder="0"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <app-wellness-sync></app-wellness-sync>
+</div>

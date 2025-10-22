@@ -1,9 +1,100 @@
-<div class="container">
-    <img src="https://images.squarespace-cdn.com/content/v1/5b96a278cc8fed3edf98dd98/1538459496942-5NBWBFSM2APP8ON86B7T/ke17ZwdGBToddI8pDm48kKUszbBbtH7lPWVFIkMd1p8UqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYy7Mythp_T-mtop-vrsUOmeInPi9iDjx9w8K4ZfjXt2dtIR-sOLRGkxcAnRSRio4lhWSRRuvmj1lIzuV8sR0d6CpC969RuPXvt2ZwyzUXQf7Q/cover-levelup.jpg?format=2500w" alt="">
-    <form (ngSubmit)="goToList()">
-      <div class="top-middle">Fit Library</div>
-      <button type="submit" class="btn btn-dark">Begin Journey</button>
-      <div class="bottom-middle"> <i> Your source of exercise knowledge.</i>
-      </div>
-    </form>
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Busy-day friendly coaching</span>
+    <h1>Your schedule, your food, one simple plan.</h1>
+    <p>Dawar Power spots the gaps in your calendar, slips in efficient workouts, and keeps meals fresh so you can stay consistent without overthinking.</p>
+    <ul class="hero-benefits">
+      <li><mat-icon>event</mat-icon><span>Auto-adjusts when meetings move.</span></li>
+      <li><mat-icon>timer</mat-icon><span>30–40 min workouts matched to your energy.</span></li>
+      <li><mat-icon>restaurant</mat-icon><span>Meal ideas that rotate flavors and fit your diet.</span></li>
+    </ul>
+    <div class="hero-actions">
+      <a mat-raised-button color="accent" routerLink="/signed-in-landing-page">Try the smart coach</a>
+      <button mat-stroked-button color="primary" (click)="goToList()">Browse movements</button>
     </div>
+  </div>
+  <div class="hero-preview">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Tomorrow at a glance</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="preview-item">
+          <strong>7:15 AM</strong>
+          <span>Quick mobility reset before commute</span>
+        </div>
+        <div class="preview-item">
+          <strong>12:40 PM</strong>
+          <span>Desk-friendly dumbbell strength stack (30 min)</span>
+        </div>
+        <div class="preview-item">
+          <strong>6:30 PM</strong>
+          <span>Citrus miso salmon bowl · 22 min · 42g protein</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
+
+<section class="pillars">
+  <mat-card>
+    <mat-icon fontIcon="schedule"></mat-icon>
+    <h3>Smart scheduling</h3>
+    <p>Enter your availability once—Dawar Power keeps finding the best windows for you.</p>
+  </mat-card>
+  <mat-card>
+    <mat-icon fontIcon="self_improvement"></mat-icon>
+    <h3>Personal workouts</h3>
+    <p>Hotel room, home gym, or park bench—sessions flex to the gear you have.</p>
+  </mat-card>
+  <mat-card>
+    <mat-icon fontIcon="restaurant_menu"></mat-icon>
+    <h3>Fresh meal ideas</h3>
+    <p>Balanced meals that change weekly and keep you looking forward to eating well.</p>
+  </mat-card>
+</section>
+
+<section class="simple-explainer">
+  <mat-card>
+    <h2>How Dawar Power fits into your week</h2>
+    <ol>
+      <li>Tell us about your work style, energy peaks, and food preferences.</li>
+      <li>Let the smart coach suggest workouts and meals that match your week.</li>
+      <li>Miss a session? Dawar Power rebooks it and tweaks your meals automatically.</li>
+    </ol>
+  </mat-card>
+</section>
+
+<section class="quote-banner">
+  <mat-icon>format_quote</mat-icon>
+  <p>“Dawar Power actually finds time for me. I don’t have to guess when to train or what to eat anymore.”</p>
+</section>
+
+<section class="faq-section">
+  <h2>Questions answered quickly</h2>
+  <div class="faq-grid">
+    <mat-card class="faq-card">
+      <h3>Does it work with my tracker?</h3>
+      <p>Yes. Sync steps, HRV, and sleep—Dawar Power uses it to fine-tune your plan.</p>
+    </mat-card>
+    <mat-card class="faq-card">
+      <h3>What if I skip a workout?</h3>
+      <p>The coach slides it to the next best slot and adjusts the rest of the week.</p>
+    </mat-card>
+    <mat-card class="faq-card">
+      <h3>Do I need a full gym?</h3>
+      <p>No. Choose bodyweight, dumbbells, or gym access and the plan adapts instantly.</p>
+    </mat-card>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-card">
+    <h2>Let Dawar Power plan your next week</h2>
+    <p>It takes two minutes to enter your schedule. The coach takes it from there.</p>
+    <div class="cta-actions">
+      <a mat-raised-button color="accent" routerLink="/signed-in-landing-page">Start planning</a>
+      <a mat-stroked-button color="primary" routerLink="/signup">Create free account</a>
+    </div>
+  </div>
+</section>

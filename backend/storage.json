@@ -1,0 +1,100 @@
+{
+  "schedules": {
+    "704e204e4b573a856092019a9b1c2374a424d624": {
+      "sessions": [
+        {
+          "day": "Monday",
+          "window": "midday",
+          "focus": "Heavy strength",
+          "durationMinutes": 45,
+          "equipment": "full gym",
+          "intensity": "high"
+        },
+        {
+          "day": "Tuesday",
+          "window": "evening",
+          "focus": "Accessory build",
+          "durationMinutes": 40,
+          "equipment": "full gym",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Wednesday",
+          "window": "midday",
+          "focus": "Recovery primer",
+          "durationMinutes": 40,
+          "equipment": "full gym",
+          "intensity": "easy"
+        },
+        {
+          "day": "Thursday",
+          "window": "evening",
+          "focus": "Heavy strength",
+          "durationMinutes": 45,
+          "equipment": "full gym",
+          "intensity": "high"
+        },
+        {
+          "day": "Friday",
+          "window": "midday",
+          "focus": "Accessory build",
+          "durationMinutes": 40,
+          "equipment": "full gym",
+          "intensity": "moderate"
+        }
+      ],
+      "notes": {
+        "summary": "Plan built around full gym sessions in your midday window. Short-term focus: Add 5 lbs lean mass. Long-term aim: Compete in obstacle race.",
+        "recoveryTip": "Low stress. Keep one mobility check-in to stay ahead of tightness.",
+        "mealAlignment": "Meals lean toward standard options with matching protein targets. Highlighting favorites: High protein bowls."
+      }
+    }
+  },
+  "wellness": [
+    {
+      "timestamp": "2025-10-22T03:22:05.436Z",
+      "source": "apple_health",
+      "steps": 9200,
+      "sleepHours": 7.6,
+      "readiness": 82,
+      "energyLevel": "steady",
+      "comment": "Office day, light walk at lunch."
+    },
+    {
+      "timestamp": "2025-10-21T03:22:05.436Z",
+      "source": "apple_health",
+      "steps": 11400,
+      "sleepHours": 8.1,
+      "readiness": 88,
+      "energyLevel": "charged",
+      "comment": null
+    },
+    {
+      "timestamp": "2025-10-22T03:22:37.560Z",
+      "source": "manual",
+      "steps": null,
+      "sleepHours": null,
+      "readiness": null,
+      "energyLevel": "steady",
+      "comment": ""
+    },
+    {
+      "timestamp": "2025-10-22T03:22:38.282Z",
+      "source": "manual",
+      "steps": null,
+      "sleepHours": null,
+      "readiness": null,
+      "energyLevel": "steady",
+      "comment": null
+    },
+    {
+      "timestamp": "2025-10-22T03:22:38.782Z",
+      "source": "manual",
+      "steps": null,
+      "sleepHours": null,
+      "readiness": null,
+      "energyLevel": "steady",
+      "comment": null
+    }
+  ]
+}

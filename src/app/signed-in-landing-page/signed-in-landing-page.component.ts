@@ -3,6 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { Exercise } from '../exercise';
 import { User } from '../user';
+import { CoachProfile, CoachProfileService } from '../coach-profile/coach-profile.service';
+import { SmartScheduleService, ScheduleResponse } from '../smart-schedule/smart-schedule.service';
+import { Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-signed-in-landing-page',
@@ -10,52 +14,79 @@ import { User } from '../user';
   styleUrls: ['./signed-in-landing-page.component.css']
 })
 export class SignedInLandingPageComponent implements OnInit {
-
-  users!: User[];
-  exercises!: Exercise[];
+  users: User[] = [];
+  exercises: Exercise[] = [];
   user = new User();
 
-  constructor(private datas:DataService, private router:Router, private activatedRoute:ActivatedRoute) {
-     }
+  profile$ = this.coachProfileService.profile$;
+  schedule$: Observable<ScheduleResponse | null> = this.profile$.pipe(
+    switchMap((profile) => {
+      if (!profile) {
+        return of(null);
+      }
+      return this.smartScheduleService.fetchStoredSchedule(profile).pipe(
+        catchError(() => this.smartScheduleService.buildSchedule(profile))
+      );
+    }),
+    catchError(() => of(null))
+  );
+
+  private readonly windowLabelMap: Record<string, string> = {
+    early_morning: 'early morning',
+    pre_work: 'pre-work',
+    midday: 'midday',
+    late_afternoon: 'late afternoon',
+    evening: 'evening',
+    weekend: 'weekend flexibility',
+  };
+
+  private readonly equipmentLabelMap: Record<string, string> = {
+    bodyweight: 'bodyweight',
+    dumbbells: 'dumbbells',
+    kettlebell: 'kettlebell',
+    bands: 'resistance bands',
+    full_gym: 'full gym',
+    outdoors: 'outdoor / run',
+  };
+
+  constructor(
+    private dataService: DataService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private coachProfileService: CoachProfileService,
+    private smartScheduleService: SmartScheduleService
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
-    this.getAllExercises();
+    this.loadExercises();
     this.loadUserFromRoute();
   }
 
   loadUsers(): void {
-    this.datas.fetchUser().subscribe(
-      response => {
-        this.users = response;
-        console.log(this.users);
-      },
-      error => console.error(error)
-    );
+    this.dataService.fetchUser().subscribe({
+      next: (response) => (this.users = response ?? []),
+      error: (error) => console.error(error),
+    });
   }
 
-  getAllExercises(): void {
-    this.datas.fetchExercises().subscribe(
-      response => {
-        this.exercises = response;
-        console.log(this.exercises);
-      },
-      error => console.error(error)
-    );
+  loadExercises(): void {
+    this.dataService.fetchExercises().subscribe({
+      next: (response) => (this.exercises = response ?? []),
+      error: (error) => console.error(error),
+    });
   }
 
-  saveExercise(userId:number, user:User): void {
+  saveExercise(userId: number, user: User): void {
     if (userId === undefined || userId === null) {
       return;
     }
 
-    this.datas.editUser(userId, user).subscribe(
-      response=>{
-        this.router.navigate(['exercise-list']);
-      },
-      error => console.error(error)
-    );
-}
+    this.dataService.editUser(userId, user).subscribe({
+      next: () => this.router.navigate(['exercise-list']),
+      error: (error) => console.error(error),
+    });
+  }
 
   private loadUserFromRoute(): void {
     const param = this.activatedRoute.snapshot.paramMap.get('userId');
@@ -68,12 +99,55 @@ export class SignedInLandingPageComponent implements OnInit {
       return;
     }
 
-    this.datas.fetchUserById(userId).subscribe(
-      response => {
+    this.dataService.fetchUserById(userId).subscribe({
+      next: (response) => {
         this.user = response;
       },
-      error => console.error(error)
-    );
+      error: (error) => console.error(error),
+    });
   }
 
+  goalLabel(profile: CoachProfile | null): string {
+    if (!profile) {
+      return 'Stay consistent';
+    }
+    switch (profile.goal) {
+      case 'fat_loss':
+        return 'Fat loss momentum';
+      case 'muscle_gain':
+        return 'Lean muscle build';
+      default:
+        return 'Performance maintenance';
+    }
+  }
+
+  firstName(profile: CoachProfile | null): string {
+    if (!profile || !profile.fullName) {
+      return 'there';
+    }
+    return profile.fullName.trim().split(' ')[0];
+  }
+
+  windowSummary(profile: CoachProfile | null): string {
+    if (!profile || !profile.preferredWindows.length) {
+      return 'We will propose openings based on your calendar sync.';
+    }
+    return profile.preferredWindows
+      .map((value) => this.windowLabelMap[value] ?? value)
+      .join(', ');
+  }
+
+  equipmentSummary(profile: CoachProfile | null): string {
+    if (!profile || !profile.equipmentAccess.length) {
+      return 'Bodyweight + mobility baseline.';
+    }
+    return profile.equipmentAccess.map((value) => this.equipmentLabelMap[value] ?? value).join(', ');
+  }
+
+  dietSummary(profile: CoachProfile | null): string {
+    if (!profile) {
+      return 'Adaptive meals';
+    }
+    return profile.dietPreference.replace('_', ' ');
+  }
 }

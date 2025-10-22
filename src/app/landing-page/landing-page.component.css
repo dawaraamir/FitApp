@@ -1,103 +1,194 @@
-.container{
-    color: white;
-    position: relative;
-    animation: fadeInAnimation ease 3s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-  }
-
-  @keyframes fadeInAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-     }
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 56px;
 }
-  .top-middle {
-    font-size:150px;
-    text-align: center;
-    position: relative;
-  }
-  button{
-    position: relative;
-    top: 75%;
-    left: 45%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .bottom-middle {
-    font-size:60px;
-    text-align: center;
-    position: relative;
-    margin-top: 400px;
-  }
-  img{
-    min-height: 100%;
-    min-width: 1024px;
-      
-    /* Set up proportionate scaling */
-    width: 100%;
-    height: auto;
-      
-    /* Set up positioning */
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-  .btn:hover{
-    color: white;
-  }
-  
-  @media screen and (max-width: 1024px) { /* Specific to this particular image */
-    img {
-      left: 50%;
-      margin-left: -512px;   /* 50% */
-    }
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.hero-copy p {
+  margin: 0;
+  color: #425466;
+}
+
+.hero-benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.hero-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.hero-benefits mat-icon {
+  color: #10b981;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hero-actions button[mat-stroked-button] {
+  border-color: rgba(37, 99, 235, 0.4);
+  color: #2563eb;
+}
+
+.hero-preview mat-card {
+  padding: 18px 24px;
+}
+
+.preview-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.preview-item:last-child {
+  border-bottom: none;
+}
+
+.pillars {
+  margin: 40px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+
+.pillars mat-card {
+  padding: 24px;
+  text-align: left;
+}
+
+.pillars mat-icon {
+  font-size: 28px;
+  width: 32px;
+  height: 32px;
+  color: #2563eb;
+}
+
+.simple-explainer mat-card {
+  padding: 28px;
+  margin-bottom: 40px;
+}
+
+.simple-explainer ol {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  color: #425466;
+}
+
+.quote-banner {
+  margin: 20px 0 60px;
+  padding: 24px;
+  border-radius: 16px;
+  background: #e8f0ff;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.quote-banner mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: #2563eb;
+}
+
+.quote-banner p {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #1f2a37;
+}
+
+.faq-section {
+  margin: 40px 0 72px;
+}
+
+.faq-section h2 {
+  margin: 0 0 20px;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.faq-card {
+  padding: 22px;
+}
+
+.cta-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.cta-card {
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(16, 185, 129, 0.12));
+  box-shadow: 0 26px 60px rgba(15, 23, 42, 0.1);
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
   }
 
-  span{
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    width: 180px;
-    height: 55px;
-    margin: 0 15px;
-    perspective: 1000px;
+  .hero-preview {
+    order: -1;
   }
-  span a{
-    font-size: 19px;
-    letter-spacing: 1px;
-    transform-style: preserve-3d;
-    transform: translateZ(-25px);
-    transition: transform .25s;
-    font-family: 'Montserrat', sans-serif;
-    
+}
+
+@media (max-width: 600px) {
+  .cta-card {
+    padding: 32px 22px;
   }
-  span a:before,
-  span a:after{
-    position: absolute;
-    content: "Begin Journey";
-    height: 55px;
-    width: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 5px solid white;
-    box-sizing: border-box;
-    border-radius: 5px;
-  }
-  span a:before{
-    color: black;
-    background: white;
-    transform: rotateY(0deg) translateZ(25px);
-  }
-  span a:after{
-    color: white;
-    transform: rotateX(90deg) translateZ(25px);
-  }
-  span a:hover{
-    transform: translateZ(-25px) rotateX(-90deg);
-  }
+}

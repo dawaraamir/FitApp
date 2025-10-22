@@ -1,0 +1,8 @@
+<div class="preset-grid">
+  <mat-card class="preset-card" *ngFor="let preset of presets">
+    <h3>{{ preset.title }}</h3>
+    <p class="subtitle">{{ preset.subtitle }}</p>
+    <p>{{ preset.blurb }}</p>
+    <button mat-raised-button color="primary" (click)="applyPreset(preset.key)">Try this plan</button>
+  </mat-card>
+</div>

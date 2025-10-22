@@ -1,0 +1,68 @@
+<mat-card class="wellness-card">
+  <h2>Wellness check-in</h2>
+  <p class="subtitle">Drop in your stats from Apple Health, Fitbit, Whoop, or manual notes. Dawar Power uses them to fine-tune rest and intensity.</p>
+
+  <div class="import-row">
+    <span>Quick import:</span>
+    <button
+      mat-stroked-button
+      type="button"
+      *ngFor="let option of importOptions"
+      (click)="importSample(option)"
+      [disabled]="submitting"
+    >
+      {{ option.label }}
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="wellness-form">
+    <mat-form-field appearance="fill">
+      <mat-label>Steps</mat-label>
+      <input matInput type="number" formControlName="steps" placeholder="8500" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Sleep (hrs)</mat-label>
+      <input matInput type="number" formControlName="sleepHours" placeholder="7.5" step="0.1" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Readiness score</mat-label>
+      <input matInput type="number" formControlName="readiness" placeholder="82" />
+      <mat-hint>0–100 from your wearable</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Energy right now</mat-label>
+      <mat-select formControlName="energyLevel">
+        <mat-option *ngFor="let option of energyOptions" [value]="option">{{ option | titlecase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="comment" rows="2" placeholder="Slept on a redeye, need mobility and lighter meal."></textarea>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-raised-button color="accent" type="submit" [disabled]="submitting">Sync stats</button>
+      <span class="feedback" *ngIf="feedback">{{ feedback }}</span>
+    </div>
+  </form>
+
+  <section class="history" *ngIf="history.length">
+    <h3>Recent syncs</h3>
+    <div class="history-list">
+      <div class="history-item" *ngFor="let metric of history">
+        <div class="history-time">{{ metric.timestamp | date:'MMM d, h:mm a' }}</div>
+        <div class="history-meta">
+          <span *ngIf="metric.steps !== undefined">Steps: {{ metric.steps }}</span>
+          <span *ngIf="metric.sleepHours !== undefined">Sleep: {{ metric.sleepHours }}h</span>
+          <span *ngIf="metric.readiness !== undefined">Readiness: {{ metric.readiness }}</span>
+          <span *ngIf="metric.energyLevel">Energy: {{ metric.energyLevel | titlecase }}</span>
+        </div>
+        <div class="history-comment" *ngIf="metric.comment">{{ metric.comment }}</div>
+      </div>
+    </div>
+  </section>
+</mat-card>

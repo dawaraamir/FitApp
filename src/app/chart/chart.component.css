@@ -1,11 +1,56 @@
-p{
-    text-align: right;
-    margin-right: 10px;
-}
-form, .subscribe:hover>div {
-	display: none;
+h1 {
+  margin-bottom: 16px;
 }
 
-.subscribe:hover>form {
-	display: block;
+.macro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.macro-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 12px;
+}
+
+.bar {
+  display: flex;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e2e8f0;
+  font-size: 0.85rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.segment.carbs {
+  background: #60a5fa;
+}
+
+.segment.protein {
+  background: #f97316;
+}
+
+.segment.fats {
+  background: #facc15;
+  color: #1f2a37;
+}
+
+.footnote {
+  margin-top: 16px;
+  color: #5b6b8c;
+  font-size: 0.9rem;
 }

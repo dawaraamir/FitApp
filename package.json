@@ -24,8 +24,6 @@
     "@angular/platform-browser-dynamic": "~12.0.1",
     "@angular/router": "~12.0.1",
     "angular-google-charts": "^2.2.2",
-    "angular2-chartjs": "^0.5.1",
-    "chartjs-plugin-labels": "^1.1.0",
     "firebase": "^7.0 || ^8.0",
     "rxjs": "~6.6.0",
     "sortable-tables": "^1.1.2",

@@ -1,0 +1,25 @@
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.preset-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+}
+
+.preset-card .subtitle {
+  margin: 0;
+  font-weight: 600;
+  color: #5b6b8c;
+}
+
+.preset-card button {
+  align-self: flex-start;
+}

@@ -1,7 +1,12 @@
 <h1>Macros</h1>
-<div style="display: block">
-<p>Losing weight</p><chart [type]="type" [data]="data" [options]="options"></chart>
-<p>Maintaining Weight</p><chart [type]="type2" [data]="data2" [options]="options2"></chart>
-<p>Gaining Weight</p><chart [type]="type3" [data]="data3" [options]="options3"></chart>
-<p>*All values calculated based on a daily calorie intake of 2000</p>
+<div class="macro-grid">
+  <div class="macro-card" *ngFor="let split of splits">
+    <h3>{{ split.title }}</h3>
+    <div class="bar">
+      <div class="segment carbs" [style.width.%]="split.carbs">Carbs {{ split.carbs }}%</div>
+      <div class="segment protein" [style.width.%]="split.protein">Protein {{ split.protein }}%</div>
+      <div class="segment fats" [style.width.%]="split.fats">Fats {{ split.fats }}%</div>
+    </div>
+  </div>
 </div>
+<p class="footnote">*All values calculated based on a daily calorie intake of 2000 kcal.</p>
