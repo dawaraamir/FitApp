@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 from hashlib import sha1
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -83,6 +83,14 @@ class MealPlanDay(BaseModel):
     focus: str
     totalCalories: int
     meals: List[MealIdea]
+    coachTip: Optional[str] = None
+    macros: Optional[Dict[str, int]] = None
+
+
+class MacroTargets(BaseModel):
+    protein: int
+    carbs: int
+    fat: int
 
 
 class MealPlanSummary(BaseModel):
@@ -90,6 +98,8 @@ class MealPlanSummary(BaseModel):
     goal: NutritionGoal
     diet: DietPreference
     hydrationCups: int
+    macroTargets: MacroTargets
+    actualMacros: MacroTargets
     highlights: List[str]
     tips: List[str]
 
@@ -111,6 +121,7 @@ class MealPlanRequest(BaseModel):
 class MealPlanResponse(BaseModel):
     summary: MealPlanSummary
     days: List[MealPlanDay]
+    rotation: List[str] = Field(default_factory=list)
 
 
 class ScheduleRequest(BaseModel):
@@ -154,6 +165,7 @@ class ScheduleNotes(BaseModel):
 class ScheduleResponse(BaseModel):
     sessions: List[ScheduledSession]
     notes: ScheduleNotes
+    insights: List[str] = Field(default_factory=list)
 
 
 class WellnessMetric(BaseModel):
@@ -164,6 +176,25 @@ class WellnessMetric(BaseModel):
     readiness: Optional[int] = Field(default=None, ge=0, le=100)
     energyLevel: Optional[str] = None
     comment: Optional[str] = None
+
+
+class CoachAction(BaseModel):
+    headline: str
+    description: str
+
+
+class CoachRecommendationRequest(BaseModel):
+    schedule: ScheduleRequest
+    mealPlan: Optional[MealPlanRequest] = None
+    focusAreas: List[str] = Field(default_factory=list)
+
+
+class CoachRecommendation(BaseModel):
+    profileHash: str
+    schedule: ScheduleResponse
+    mealPlan: MealPlanResponse
+    takeaways: List[str]
+    nextActions: List[CoachAction]
 
 
 MEAL_LIBRARY: List[Dict[str, object]] = [
@@ -321,6 +352,12 @@ MEAL_SPLITS = {
     "Snack": 0.15,
 }
 
+MACRO_SPLITS: Dict[NutritionGoal, Dict[str, float]] = {
+    NutritionGoal.fat_loss: {"protein": 0.35, "carbs": 0.35, "fat": 0.30},
+    NutritionGoal.maintain: {"protein": 0.30, "carbs": 0.40, "fat": 0.30},
+    NutritionGoal.muscle_gain: {"protein": 0.32, "carbs": 0.45, "fat": 0.23},
+}
+
 GOAL_CALORIE_MODIFIERS = {
     NutritionGoal.fat_loss: 0.85,
     NutritionGoal.maintain: 1.0,
@@ -366,6 +403,14 @@ GOAL_TIPS = {
         "Sip electrolytes when sessions run longer than 60 minutes.",
     ],
 }
+
+MEAL_COACH_TIPS = [
+    "Double prep breakfast tonight so the morning starts on autopilot.",
+    "Log meals in your tracker before lunch to reinforce targets.",
+    "Batch cook grains so dinners assemble in under 10 minutes.",
+    "Fill a 24oz bottle now to cover the next two hydration cups.",
+    "Review tomorrow's snacks and keep one visible at your workstation.",
+]
 
 
 PROVIDER_SAMPLES: Dict[str, List[Dict[str, Optional[str]]]] = {
@@ -440,8 +485,8 @@ def _load_persistent_state() -> None:
 
 
 def _persist_state() -> None:
-    schedule_payload = {key: schedule.dict() for key, schedule in _schedules.items()}
-    wellness_payload = [metric.dict() for metric in _wellness_log]
+    schedule_payload = {key: schedule.model_dump() for key, schedule in _schedules.items()}
+    wellness_payload = [metric.model_dump() for metric in _wellness_log]
     save_storage(schedule_payload, wellness_payload)
 
 WINDOW_LABELS = {
@@ -475,6 +520,24 @@ EQUIPMENT_PRIORITIES = {
     "bodyweight": "bodyweight",
     "outdoors": "outdoor",
 }
+
+READINESS_INSIGHTS = {
+    "low": "Latest readiness flagged under 60 — keep the first session lighter and extend cooldowns.",
+    "high": "Readiness is elevated — consider adding one bonus finisher if energy stays high.",
+}
+
+SLEEP_INSIGHT = "Sleep dipped below 6 hours. Keep today mobility-heavy and schedule an earlier cutoff tonight."
+
+STRESS_INSIGHTS = {
+    "high": "Stress level high — layer in breath work and swap one session for restorative flow.",
+    "low": "Stress tracking low — template leans into progressive overload blocks.",
+}
+
+HYDRATION_PROMPTS = [
+    "Front-load two cups of water before 10 AM.",
+    "Add electrolytes to the post-session drink on tougher days.",
+    "Keep a bottle at your desk and refill during standing breaks.",
+]
 
 
 def _next_exercise_id() -> int:
@@ -552,6 +615,39 @@ def _normalise_target_calories(request: MealPlanRequest) -> int:
     return max(1500, min(target, 4200))
 
 
+def _compute_macro_targets(calories: int, goal: NutritionGoal) -> MacroTargets:
+    splits = MACRO_SPLITS.get(goal, MACRO_SPLITS[NutritionGoal.maintain])
+    protein = int(round((calories * splits["protein"]) / 4))
+    carbs = int(round((calories * splits["carbs"]) / 4))
+    fat = int(round((calories * splits["fat"]) / 9))
+    return MacroTargets(protein=protein, carbs=carbs, fat=fat)
+
+
+def _macros_from_meals(meals: Sequence[Dict[str, object]]) -> MacroTargets:
+    protein = sum(int(meal.get("protein", 0) or 0) for meal in meals)
+    carbs = sum(int(meal.get("carbs", 0) or 0) for meal in meals)
+    fat = sum(int(meal.get("fat", 0) or 0) for meal in meals)
+    return MacroTargets(protein=protein, carbs=carbs, fat=fat)
+
+
+def _coach_tip_for_day(index: int, preference_text: str, hydration_cups: int) -> str:
+    base_tip = MEAL_COACH_TIPS[index % len(MEAL_COACH_TIPS)]
+    if preference_text:
+        base_tip = f"{base_tip} Lean into {preference_text} inspired spices."
+    hydration_tip = HYDRATION_PROMPTS[index % len(HYDRATION_PROMPTS)]
+    return f"{base_tip} {hydration_tip} Target {hydration_cups} cups today."
+
+
+def _ordered_unique(values: Sequence[str]) -> List[str]:
+    seen = set()
+    ordered: List[str] = []
+    for value in values:
+        if value not in seen:
+            ordered.append(value)
+            seen.add(value)
+    return ordered
+
+
 def _build_meal_plan(request: MealPlanRequest) -> MealPlanResponse:
     target_calories = _normalise_target_calories(request)
     per_meal_targets = {
@@ -562,12 +658,18 @@ def _build_meal_plan(request: MealPlanRequest) -> MealPlanResponse:
     days: List[MealPlanDay] = []
     restrictions = [item.strip().lower() for item in request.restrictions + request.allergies if item.strip()]
     preference_text = (request.preferences or "").lower()
+    hydration_target = HYDRATION_GUIDE.get(request.goal, 9)
+
+    rotation_indices = {meal_type: 0 for meal_type in MEAL_SPLITS.keys()}
+    aggregate_macros = {"protein": 0, "carbs": 0, "fat": 0}
+    rotation_tracker: List[str] = []
 
     for index in range(request.days):
         focus = DAY_FOCUS[index % len(DAY_FOCUS)]
         day_label = f"Day {index + 1}"
-        meals: List[MealIdea] = []
-        total = 0
+        selected_meals: List[MealIdea] = []
+        raw_meals: List[Dict[str, object]] = []
+        total_calories = 0
 
         for meal_type in MEAL_SPLITS.keys():
             candidates = _filter_meals_for_diet(meal_type, request.diet)
@@ -582,42 +684,100 @@ def _build_meal_plan(request: MealPlanRequest) -> MealPlanResponse:
                 meal
                 for meal in sorted_candidates
                 if not restrictions
-                or not any(keyword in (" ".join([meal["name"], meal.get("description", ""), " ".join(meal.get("tags", []))]).lower()) for keyword in restrictions)
+                or not any(
+                    keyword
+                    in (
+                        " ".join(
+                            [
+                                meal["name"],
+                                meal.get("description", ""),
+                                " ".join(meal.get("tags", [])),
+                            ]
+                        ).lower()
+                    )
+                    for keyword in restrictions
+                )
             ]
 
             candidates_pool = filtered_candidates or sorted_candidates
-            chosen = candidates_pool[index % len(candidates_pool)]
+            rotation_offset = rotation_indices[meal_type]
+            chosen = candidates_pool[(index + rotation_offset) % len(candidates_pool)]
+            rotation_indices[meal_type] = (rotation_offset + 1) % len(candidates_pool)
 
             meal_payload = {
                 key: chosen[key]
-                for key in ["name", "mealType", "calories", "protein", "carbs", "fat", "prepTime", "description", "tags"]
+                for key in [
+                    "name",
+                    "mealType",
+                    "calories",
+                    "protein",
+                    "carbs",
+                    "fat",
+                    "prepTime",
+                    "description",
+                    "tags",
+                ]
             }
-            meals.append(MealIdea(**meal_payload))
-            total += int(chosen["calories"])
+            selected_meals.append(MealIdea(**meal_payload))
+            raw_meals.append(meal_payload)
+            rotation_tracker.append(str(meal_payload["name"]))
+            total_calories += int(chosen["calories"])
 
-        days.append(MealPlanDay(day=day_label, focus=focus, totalCalories=total, meals=meals))
+        day_macro = _macros_from_meals(raw_meals)
+        aggregate_macros["protein"] += day_macro.protein
+        aggregate_macros["carbs"] += day_macro.carbs
+        aggregate_macros["fat"] += day_macro.fat
+
+        coach_tip = _coach_tip_for_day(index, preference_text, hydration_target)
+
+        days.append(
+            MealPlanDay(
+                day=day_label,
+                focus=focus,
+                totalCalories=total_calories,
+                meals=selected_meals,
+                coachTip=coach_tip,
+                macros=day_macro.model_dump(),
+            )
+        )
+
+    average_macro = MacroTargets(
+        protein=int(round(aggregate_macros["protein"] / max(len(days), 1))),
+        carbs=int(round(aggregate_macros["carbs"] / max(len(days), 1))),
+        fat=int(round(aggregate_macros["fat"] / max(len(days), 1))),
+    )
+
+    highlights = list(DIET_HIGHLIGHTS.get(request.diet, []))
+    tips = list(GOAL_TIPS.get(request.goal, []))
+
+    if preference_text:
+        highlights.append(f"Flavor focus: {preference_text}")
+    if request.activityLevel:
+        highlights.append(f"Activity level: {request.activityLevel}")
+    if request.supplements:
+        tips.append(f"Keep supplements on schedule: {request.supplements}.")
+    if request.weightGoalShort:
+        tips.append(f"Short-term goal: {request.weightGoalShort}.")
+    if request.weightGoalLong:
+        tips.append(f"Long-term goal: {request.weightGoalLong}.")
+
+    hydration_prompt = HYDRATION_PROMPTS[len(days) % len(HYDRATION_PROMPTS)]
+    tips.append(hydration_prompt)
 
     summary = MealPlanSummary(
         targetCalories=target_calories,
         goal=request.goal,
         diet=request.diet,
-        hydrationCups=HYDRATION_GUIDE.get(request.goal, 9),
-        highlights=DIET_HIGHLIGHTS.get(request.diet, []),
-        tips=GOAL_TIPS.get(request.goal, []),
+        hydrationCups=hydration_target,
+        macroTargets=_compute_macro_targets(target_calories, request.goal),
+        actualMacros=average_macro,
+        highlights=highlights,
+        tips=tips,
     )
 
-    if preference_text:
-        summary.highlights.append(f"Flavor focus: {preference_text}")
-    if request.supplements:
-        summary.tips.append(f"Keep supplements on schedule: {request.supplements}.")
-    if request.weightGoalShort:
-        summary.tips.append(f"Short-term goal: {request.weightGoalShort}.")
-    if request.weightGoalLong:
-        summary.tips.append(f"Long-term goal: {request.weightGoalLong}.")
-    if request.activityLevel:
-        summary.highlights.append(f"Activity level: {request.activityLevel}")
+    rotation = _ordered_unique(rotation_tracker)
 
-    return MealPlanResponse(summary=summary, days=days)
+    return MealPlanResponse(summary=summary, days=days, rotation=rotation)
 
 
 def _pick_windows(preferred: List[str]) -> List[str]:
@@ -689,6 +849,7 @@ def _build_schedule_plan(request: ScheduleRequest) -> ScheduleResponse:
         target_days.append("Saturday")
 
     sessions: List[ScheduledSession] = []
+    insights: List[str] = []
     base_duration = 30 if request.goal == NutritionGoal.fat_loss else 35
 
     activity = (request.activityLevel or "moderate").lower()
@@ -706,12 +867,15 @@ def _build_schedule_plan(request: ScheduleRequest) -> ScheduleResponse:
     if latest_metric and latest_metric.readiness is not None:
         if latest_metric.readiness < 60:
             readiness_adjustment = -5
+            insights.append(READINESS_INSIGHTS["low"])
         elif latest_metric.readiness > 85:
             readiness_adjustment = 5
+            insights.append(READINESS_INSIGHTS["high"])
 
     sleep_adjustment = 0
     if latest_metric and latest_metric.sleepHours is not None and latest_metric.sleepHours < 6:
         sleep_adjustment = -5
+        insights.append(SLEEP_INSIGHT)
 
     for index, day in enumerate(target_days):
         window_key = windows[index % len(windows)]
@@ -740,8 +904,10 @@ def _build_schedule_plan(request: ScheduleRequest) -> ScheduleResponse:
     stress = (request.stressLevel or "moderate").lower()
     if stress == "high":
         recovery_tip = "High stress flagged—add an extra mobility or breath session after dinner."
+        insights.append(STRESS_INSIGHTS["high"])
     elif stress == "low":
         recovery_tip = "Low stress. Keep one mobility check-in to stay ahead of tightness."
+        insights.append(STRESS_INSIGHTS["low"])
     else:
         recovery_tip = "Moderate stress. Mix in a short walk after lunch to reset energy."
 
@@ -766,7 +932,102 @@ def _build_schedule_plan(request: ScheduleRequest) -> ScheduleResponse:
         mealAlignment=meal_alignment,
     )
 
-    return ScheduleResponse(sessions=sessions, notes=notes)
+    if readiness_adjustment < 0 or stress == "high":
+        sessions.append(
+            ScheduledSession(
+                day="Flex Day",
+                window="On-demand",
+                focus="Recovery flow + guided breath",
+                durationMinutes=20,
+                equipment="bodyweight",
+                intensity="easy",
+            )
+        )
+        insights.append("Recovery buffer added to protect energy budget this week.")
+
+    return ScheduleResponse(sessions=sessions, notes=notes, insights=_ordered_unique(insights))
+
+
+def _macro_summary_text(targets: MacroTargets) -> str:
+    return f"{targets.protein}g protein · {targets.carbs}g carbs · {targets.fat}g fat"
+
+
+def _compile_takeaways(
+    schedule: ScheduleResponse, meal_plan: MealPlanResponse, focus_areas: Sequence[str]
+) -> List[str]:
+    focus_lookup = {area.lower() for area in focus_areas}
+    takeaways: List[str] = [
+        schedule.notes.summary,
+        schedule.notes.mealAlignment,
+        f"Macro target: {_macro_summary_text(meal_plan.summary.macroTargets)}",
+    ]
+    if schedule.insights:
+        takeaways.extend(schedule.insights)
+    if "recovery" in focus_lookup or "stress" in focus_lookup:
+        takeaways.append("Coach emphasis: prioritize recovery modalities twice this week.")
+    if meal_plan.summary.actualMacros != meal_plan.summary.macroTargets:
+        takeaways.append(
+            f"Actual daily macros average {_macro_summary_text(meal_plan.summary.actualMacros)}."
+        )
+    return _ordered_unique(takeaways)
+
+
+def _build_coach_actions(
+    schedule: ScheduleResponse, meal_plan: MealPlanResponse, focus_areas: Sequence[str]
+) -> List[CoachAction]:
+    actions: List[CoachAction] = []
+    focus_lookup = {area.lower() for area in focus_areas}
+
+    if schedule.sessions:
+        first_session = schedule.sessions[0]
+        actions.append(
+            CoachAction(
+                headline=f"Lock {first_session.focus} on {first_session.day}",
+                description=(
+                    f"Block {first_session.durationMinutes} minutes in the {first_session.window} window. "
+                    "Lay out equipment tonight so the session starts friction-free."
+                ),
+            )
+        )
+
+    if meal_plan.days and meal_plan.days[0].meals:
+        top_meal = meal_plan.days[0].meals[0]
+        actions.append(
+            CoachAction(
+                headline=f"Prep {top_meal.name}",
+                description=(
+                    f"Set aside {top_meal.prepTime} minutes to prep {top_meal.mealType.lower()} for Day 1. "
+                    "Batch one extra portion to cover a busy morning."
+                ),
+            )
+        )
+
+    metric = _latest_wellness_metric()
+    if metric and metric.sleepHours and metric.sleepHours < 7:
+        actions.append(
+            CoachAction(
+                headline="Prioritise sleep hygiene tonight",
+                description="Aim for lights-out 30 minutes earlier and keep screens outside the bedroom.",
+            )
+        )
+
+    if "travel" in focus_lookup:
+        actions.append(
+            CoachAction(
+                headline="Pack travel-friendly snacks",
+                description="Use sealed containers for nuts and protein powder to stay aligned with macros on the go.",
+            )
+        )
+
+    if not actions:
+        actions.append(
+            CoachAction(
+                headline="Check in with the coach",
+                description="Log a quick journal entry after tomorrow's session to keep the adaptive plan dialled in.",
+            )
+        )
+
+    return actions
 
 
 @app.get("/fit/exercise", response_model=List[Exercise])
@@ -891,6 +1152,34 @@ def fetch_schedule_by_profile(request: ScheduleRequest) -> ScheduleResponse:
     if profile_key not in _schedules:
         raise HTTPException(status_code=404, detail="Schedule not found for profile")
     return _schedules[profile_key]
+
+
+@app.post("/fit/coach/recommendation", response_model=CoachRecommendation)
+def generate_coach_recommendation(payload: CoachRecommendationRequest) -> CoachRecommendation:
+    schedule_request = payload.schedule
+    profile_key = _profile_hash(schedule_request)
+    schedule = _build_schedule_plan(schedule_request)
+    _schedules[profile_key] = schedule
+
+    meal_request = payload.mealPlan or MealPlanRequest(
+        goal=schedule_request.goal,
+        diet=schedule_request.dietPreference,
+        days=3,
+    )
+    meal_plan = _build_meal_plan(meal_request)
+
+    takeaways = _compile_takeaways(schedule, meal_plan, payload.focusAreas)
+    actions = _build_coach_actions(schedule, meal_plan, payload.focusAreas)
+
+    _persist_state()
+
+    return CoachRecommendation(
+        profileHash=profile_key,
+        schedule=schedule,
+        mealPlan=meal_plan,
+        takeaways=takeaways,
+        nextActions=actions,
+    )
 
 
 @app.post("/fit/wellness-sync", response_model=Dict[str, str])

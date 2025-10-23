@@ -33,11 +33,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatStepperModule } from '@angular/material/stepper';
 import { TaskComponent } from './task/task.component';
 import { MealPlanGeneratorComponent } from './meal-plan/meal-plan-generator.component';
 import { CoachProfileComponent } from './coach-profile/coach-profile.component';
 import { WellnessSyncComponent } from './wellness-sync/wellness-sync.component';
 import { QuickStartPresetsComponent } from './quick-start-presets/quick-start-presets.component';
+import { ProfileOnboardingComponent } from './coach-profile/profile-onboarding.component';
+import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,9 @@ import { QuickStartPresetsComponent } from './quick-start-presets/quick-start-pr
     MealPlanGeneratorComponent,
     CoachProfileComponent,
     WellnessSyncComponent,
-    QuickStartPresetsComponent
+    QuickStartPresetsComponent,
+    ProfileOnboardingComponent,
+    MobileNavComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +85,7 @@ import { QuickStartPresetsComponent } from './quick-start-presets/quick-start-pr
     MatListModule,
     MatProgressBarModule,
     MatTooltipModule,
+    MatStepperModule,
     DragDropModule,
     ReactiveFormsModule
   ],

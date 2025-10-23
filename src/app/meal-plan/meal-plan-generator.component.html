@@ -64,8 +64,25 @@
           <div class="value">{{ details.hydrationCups }} cups</div>
           <p>Approx. {{ details.hydrationCups * 250 | number }}ml across the day.</p>
         </div>
+        <div class="stat">
+          <span class="label">Macro targets</span>
+          <div class="value macro">{{ macroSummaryText(details.macroTargets) }}</div>
+          <p>
+            Actual average:
+            <strong>{{ macroSummaryText(details.actualMacros) }}</strong>
+            <ng-container *ngIf="macroVariance() as variance">
+              ({{ variance }})
+            </ng-container>
+          </p>
+        </div>
         <div class="highlight-chips">
           <mat-chip *ngFor="let highlight of details.highlights">{{ highlight }}</mat-chip>
+        </div>
+        <div class="rotation" *ngIf="rotation().length">
+          <span class="label">Rotation</span>
+          <mat-chip-list>
+            <mat-chip *ngFor="let item of rotation()">{{ item }}</mat-chip>
+          </mat-chip-list>
         </div>
       </mat-card>
 
@@ -108,6 +125,15 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="day-footer">
+          <p class="coach-tip" *ngIf="day.coachTip">
+            <mat-icon>tips_and_updates</mat-icon>
+            {{ day.coachTip }}
+          </p>
+          <p class="macro-summary" *ngIf="day.macros">
+            {{ dayMacroSummary(day) }}
+          </p>
         </div>
       </mat-card>
     </section>

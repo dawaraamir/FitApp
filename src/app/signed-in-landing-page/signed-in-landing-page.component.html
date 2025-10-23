@@ -1,65 +1,95 @@
 <div class="dashboard-shell">
   <ng-container *ngIf="profile$ | async as profile; else defaultDashboard">
-    <ng-container *ngIf="schedule$ | async as schedule; else loadingSchedule">
-      <section class="dashboard-hero">
-        <div class="hero-copy">
-          <h1>Hi {{ firstName(profile) }}, here&apos;s your {{ goalLabel(profile) }} layout.</h1>
-          <p>{{ schedule?.notes?.summary }}</p>
-        </div>
-        <div class="hero-stats">
-          <mat-card class="stat-card">
-            <mat-icon>event_available</mat-icon>
-            <div>
-              <span class="value">{{ profile.workStyle | titlecase }}</span>
-              <span class="label">{{ windowSummary(profile) }}</span>
-            </div>
-          </mat-card>
-          <mat-card class="stat-card">
-            <mat-icon>fitness_center</mat-icon>
-            <div>
-              <span class="value">{{ profile.equipmentAccess.length ? profile.equipmentAccess.length : 'Adaptive' }}</span>
-              <span class="label">{{ equipmentSummary(profile) }}</span>
-            </div>
-          </mat-card>
-          <mat-card class="stat-card">
-            <mat-icon>restaurant</mat-icon>
-            <div>
-              <span class="value">{{ dietSummary(profile) | titlecase }}</span>
-              <span class="label">{{ profile.calorieTarget ? profile.calorieTarget + ' kcal daily' : 'Coach auto-adjusts macros' }}</span>
-            </div>
-          </mat-card>
-        </div>
-      </section>
-
-      <section class="schedule-card">
-        <mat-card>
-          <h3>This week&apos;s coach picks</h3>
-          <p>{{ schedule?.notes?.recoveryTip }}</p>
-          <div class="schedule-list">
-            <div class="schedule-row" *ngFor="let session of schedule?.sessions">
-              <div class="day">{{ session.day }}</div>
-              <div class="window">{{ session.window }}</div>
-              <div class="focus">{{ session.focus }}</div>
-              <div class="meta">{{ session.durationMinutes }} min · {{ session.equipment }} · {{ session.intensity | titlecase }}</div>
-            </div>
+    <ng-container *ngIf="recommendation$ | async as recommendation; else loadingSchedule">
+      <ng-container *ngIf="scheduleFromRecommendation(recommendation) as schedule">
+        <section class="dashboard-hero">
+          <div class="hero-copy">
+            <h1>Hi {{ firstName(profile) }}, here&apos;s your {{ goalLabel(profile) }} layout.</h1>
+            <p>{{ schedule.notes.summary }}</p>
           </div>
-        </mat-card>
-      </section>
+          <div class="hero-stats">
+            <mat-card class="stat-card">
+              <mat-icon>event_available</mat-icon>
+              <div>
+                <span class="value">{{ profile.workStyle | titlecase }}</span>
+                <span class="label">{{ windowSummary(profile) }}</span>
+              </div>
+            </mat-card>
+            <mat-card class="stat-card">
+              <mat-icon>fitness_center</mat-icon>
+              <div>
+                <span class="value">{{ profile.equipmentAccess.length ? profile.equipmentAccess.length : 'Adaptive' }}</span>
+                <span class="label">{{ equipmentSummary(profile) }}</span>
+              </div>
+            </mat-card>
+            <mat-card class="stat-card">
+              <mat-icon>restaurant</mat-icon>
+              <div>
+                <span class="value">{{ dietSummary(profile) | titlecase }}</span>
+                <span class="label">
+                  {{
+                    recommendation.mealPlan.summary.macroTargets.protein
+                  }}g P ·
+                  {{
+                    recommendation.mealPlan.summary.macroTargets.carbs
+                  }}g C ·
+                  {{
+                    recommendation.mealPlan.summary.macroTargets.fat
+                  }}g F
+                </span>
+              </div>
+            </mat-card>
+          </div>
+        </section>
 
-      <section class="insight-cards">
-        <mat-card class="insight-card">
-          <h3>Weekly anchor</h3>
-          <p>We keep {{ windowSummary(profile) }} as your prime windows and flag alternates if meetings appear.</p>
-        </mat-card>
-        <mat-card class="insight-card">
-          <h3>Nutrition focus</h3>
-          <p>{{ schedule?.notes?.mealAlignment }}</p>
-        </mat-card>
-        <mat-card class="insight-card">
-          <h3>Recovery cues</h3>
-          <p>Stress trend: {{ profile.stressLevel | titlecase }}. Expect breath work, walks, and recovery prompts accordingly.</p>
-        </mat-card>
-      </section>
+        <section class="schedule-card">
+          <mat-card>
+            <h3>This week&apos;s coach picks</h3>
+            <p>{{ schedule.notes.recoveryTip }}</p>
+            <div class="insight-tags" *ngIf="schedule.insights?.length">
+              <mat-chip color="primary" selected *ngFor="let insight of schedule.insights">{{ insight }}</mat-chip>
+            </div>
+            <div class="schedule-list">
+              <div class="schedule-row" *ngFor="let session of schedule.sessions">
+                <div class="day">{{ session.day }}</div>
+                <div class="window">{{ session.window }}</div>
+                <div class="focus">{{ session.focus }}</div>
+                <div class="meta">
+                  {{ session.durationMinutes }} min · {{ session.equipment }} · {{ session.intensity | titlecase }}
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </section>
+
+        <section class="insight-cards">
+          <mat-card class="insight-card">
+            <h3>Coach takeaways</h3>
+            <ul>
+              <li *ngFor="let takeaway of takeaways(recommendation)">{{ takeaway }}</li>
+            </ul>
+          </mat-card>
+          <mat-card class="insight-card">
+            <h3>Nutrition focus</h3>
+            <p>{{ schedule.notes.mealAlignment }}</p>
+            <p class="macro-note">
+              Actual avg:
+              {{ recommendation.mealPlan.summary.actualMacros.protein }}g P ·
+              {{ recommendation.mealPlan.summary.actualMacros.carbs }}g C ·
+              {{ recommendation.mealPlan.summary.actualMacros.fat }}g F
+            </p>
+          </mat-card>
+          <mat-card class="insight-card">
+            <h3>Next actions</h3>
+            <div class="action-list">
+              <div class="action-item" *ngFor="let action of actions(recommendation)">
+                <strong>{{ action.headline }}</strong>
+                <p>{{ action.description }}</p>
+              </div>
+            </div>
+          </mat-card>
+        </section>
+      </ng-container>
     </ng-container>
   </ng-container>
 
@@ -132,11 +162,13 @@
   <mat-tab-group animationDuration="250ms">
     <mat-tab label="Workout planner">
       <div class="tab-panel">
-        <ng-container *ngIf="schedule$ | async as schedule; else basicPlanner">
-          <app-task
-            [recommendedSessions]="schedule?.sessions || []"
-            [scheduleSummary]="schedule?.notes?.summary || ''"
-          ></app-task>
+        <ng-container *ngIf="recommendation$ | async as recommendation; else basicPlanner">
+          <ng-container *ngIf="scheduleFromRecommendation(recommendation) as schedule; else basicPlanner">
+            <app-task
+              [recommendedSessions]="schedule.sessions || []"
+              [scheduleSummary]="schedule.notes?.summary || ''"
+            ></app-task>
+          </ng-container>
         </ng-container>
         <ng-template #basicPlanner>
           <app-task></app-task>

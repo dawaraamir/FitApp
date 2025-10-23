@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MealPlanRequest, MealPlanResponse } from './meal-plan.model';
+import { environment } from '../../environments/environment';
 
-const MEAL_PLAN_ENDPOINT = 'http://localhost:8080/fit/meal-plan';
+const MEAL_PLAN_ENDPOINT = `${environment.apiBaseUrl}/meal-plan`;
 
 @Injectable({
   providedIn: 'root',

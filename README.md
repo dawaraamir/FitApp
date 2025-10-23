@@ -140,6 +140,30 @@ To plug in real provider feeds, set an environment variable such as `DAWAR_POWER
 - Profile data is stored locally and feeds both the workout planner (guidance card + focus messaging) and meal plan defaults (goal, dietary lane, suggested calorie targets).
 - Update the profile anytime; Dawar Power rebalances recommendations immediately.
 
+## Mobile packaging (Capacitor)
+
+Wrap the Angular app as a store-ready mobile shell with Capacitor:
+
+1. Install the Capacitor toolchain (requires network access): `npm install` and run `npx cap add ios` or `npx cap add android` once per platform.
+2. Build and sync the web assets into the native projects:
+
+   ```bash
+   npm run mobile:sync
+   ```
+
+   The script automatically sets `NODE_OPTIONS=--openssl-legacy-provider` so Webpack works on Node 18+.
+
+3. Open the native workspace:
+
+   ```bash
+   npm run mobile:open:ios      # Xcode
+   npm run mobile:open:android  # Android Studio
+   ```
+
+4. During local development you can point the mobile shell at your running backend by exporting `CAP_SERVER_URL=http://<your-ip>:8080` before syncing. Clear the variable (or run `npx cap sync`) to return to the embedded bundle.
+
+> Tip: After adjusting Angular code, re-run `npm run mobile:sync` so the latest build lands inside `ios/` or `android/`.
+
 ## Deployment
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for steps to fast-forward and push the `main` branch after your changes are reviewed.

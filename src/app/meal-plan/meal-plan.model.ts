@@ -14,11 +14,19 @@ export interface MealIdea {
   tags: string[];
 }
 
+export interface MacroTargets {
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
 export interface MealPlanDay {
   day: string;
   focus: string;
   totalCalories: number;
   meals: MealIdea[];
+  coachTip?: string;
+  macros?: MacroTargets;
 }
 
 export interface MealPlanSummary {
@@ -26,6 +34,8 @@ export interface MealPlanSummary {
   goal: NutritionGoal;
   diet: DietPreference;
   hydrationCups: number;
+  macroTargets: MacroTargets;
+  actualMacros: MacroTargets;
   highlights: string[];
   tips: string[];
 }
@@ -33,6 +43,7 @@ export interface MealPlanSummary {
 export interface MealPlanResponse {
   summary: MealPlanSummary;
   days: MealPlanDay[];
+  rotation: string[];
 }
 
 export interface MealPlanRequest {

@@ -4,7 +4,12 @@ import { DataService } from '../data.service';
 import { Exercise } from '../exercise';
 import { User } from '../user';
 import { CoachProfile, CoachProfileService } from '../coach-profile/coach-profile.service';
-import { SmartScheduleService, ScheduleResponse } from '../smart-schedule/smart-schedule.service';
+import {
+  CoachRecommendation,
+  CoachAction,
+  SmartScheduleService,
+  ScheduleResponse,
+} from '../smart-schedule/smart-schedule.service';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
@@ -19,14 +24,27 @@ export class SignedInLandingPageComponent implements OnInit {
   user = new User();
 
   profile$ = this.coachProfileService.profile$;
-  schedule$: Observable<ScheduleResponse | null> = this.profile$.pipe(
+  recommendation$: Observable<CoachRecommendation | null> = this.profile$.pipe(
     switchMap((profile) => {
       if (!profile) {
         return of(null);
       }
-      return this.smartScheduleService.fetchStoredSchedule(profile).pipe(
-        catchError(() => this.smartScheduleService.buildSchedule(profile))
-      );
+      return this.smartScheduleService
+        .generateCoachRecommendation(profile, {
+          goal: profile.goal,
+          diet: profile.dietPreference,
+          days: Math.min(Math.max(profile.preferredWindows?.length || 3, 3), 5),
+          calories: profile.calorieTarget ?? null,
+        })
+        .pipe(
+          catchError(() =>
+            this.smartScheduleService.generateCoachRecommendation(profile, {
+              goal: profile.goal,
+              diet: profile.dietPreference,
+              days: 3,
+            })
+          )
+        );
     }),
     catchError(() => of(null))
   );
@@ -149,5 +167,17 @@ export class SignedInLandingPageComponent implements OnInit {
       return 'Adaptive meals';
     }
     return profile.dietPreference.replace('_', ' ');
+  }
+
+  scheduleFromRecommendation(recommendation: CoachRecommendation | null): ScheduleResponse | null {
+    return recommendation?.schedule ?? null;
+  }
+
+  takeaways(recommendation: CoachRecommendation | null): string[] {
+    return recommendation?.takeaways ?? [];
+  }
+
+  actions(recommendation: CoachRecommendation | null): CoachAction[] {
+    return recommendation?.nextActions ?? [];
   }
 }

@@ -1,0 +1,12 @@
+<nav class="mobile-nav">
+  <a
+    *ngFor="let link of links"
+    class="nav-item"
+    [routerLink]="link.route"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: link.route === '/signed-in-landing-page' }"
+  >
+    <mat-icon>{{ link.icon }}</mat-icon>
+    <span>{{ link.label }}</span>
+  </a>
+</nav>

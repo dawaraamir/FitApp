@@ -128,6 +128,45 @@ export class MealPlanGeneratorComponent implements OnInit, OnDestroy {
     return day.day;
   }
 
+  macroSummaryText(target?: { protein: number; carbs: number; fat: number } | null): string {
+    if (!target) {
+      return '';
+    }
+    return `${target.protein}g protein · ${target.carbs}g carbs · ${target.fat}g fat`;
+  }
+
+  dayMacroSummary(day: MealPlanDay): string {
+    return this.macroSummaryText(day.macros ?? null);
+  }
+
+  macroVariance(): string | null {
+    if (!this.summary) {
+      return null;
+    }
+    const summary = this.summary;
+    const diffProtein = summary.actualMacros.protein - summary.macroTargets.protein;
+    const diffCarbs = summary.actualMacros.carbs - summary.macroTargets.carbs;
+    const diffFat = summary.actualMacros.fat - summary.macroTargets.fat;
+    const formatted = [
+      this.formatDelta(diffProtein, 'protein'),
+      this.formatDelta(diffCarbs, 'carbs'),
+      this.formatDelta(diffFat, 'fat'),
+    ].filter(Boolean);
+    return formatted.length ? formatted.join(' • ') : null;
+  }
+
+  rotation(): string[] {
+    return this.plan?.rotation ?? [];
+  }
+
+  private formatDelta(value: number, label: string): string | null {
+    if (!value || Math.abs(value) < 5) {
+      return null;
+    }
+    const sign = value > 0 ? '+' : '';
+    return `${sign}${value}g ${label}`;
+  }
+
   private loadDefaultPlan(): void {
     this.loading = true;
     this.errorMessage = '';

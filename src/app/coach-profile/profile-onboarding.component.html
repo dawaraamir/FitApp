@@ -1,0 +1,134 @@
+<mat-card class="onboarding-card">
+  <header>
+    <h2>Quick start coach onboarding</h2>
+    <p>Three quick steps and Dawar Power will seed your workouts, meals, and recovery cues for mobile use.</p>
+  </header>
+
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="identityGroup">
+      <form [formGroup]="identityGroup">
+        <ng-template matStepLabel>Who are we training?</ng-template>
+        <div class="step-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>Full name</mat-label>
+            <input matInput formControlName="fullName" placeholder="Jordan Lee" />
+            <mat-error *ngIf="identityGroup.get('fullName')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Occupation</mat-label>
+            <input matInput formControlName="occupation" placeholder="Product manager" />
+            <mat-error *ngIf="identityGroup.get('occupation')?.hasError('required')">
+              Occupation helps us match energy demands.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Work style</mat-label>
+            <mat-select formControlName="workStyle">
+              <mat-option *ngFor="let option of workStyles" [value]="option.value">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Primary goal</mat-label>
+            <mat-select formControlName="goal">
+              <mat-option *ngFor="let option of goalOptions" [value]="option.value">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Time zone</mat-label>
+            <input matInput formControlName="timezone" placeholder="EST / UTC-5" />
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="scheduleGroup">
+      <form [formGroup]="scheduleGroup">
+        <ng-template matStepLabel>When can you train?</ng-template>
+        <div class="step-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>Preferred windows</mat-label>
+            <mat-select multiple formControlName="preferredWindows">
+              <mat-option *ngFor="let option of windowOptions" [value]="option.value">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Equipment on hand</mat-label>
+            <mat-select multiple formControlName="equipmentAccess">
+              <mat-option *ngFor="let gear of equipmentOptions" [value]="gear.value">{{ gear.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Activity level</mat-label>
+            <mat-select formControlName="activityLevel">
+              <mat-option value="sedentary">Sedentary</mat-option>
+              <mat-option value="light">Light (1-2 sessions/week)</mat-option>
+              <mat-option value="moderate">Moderate (3-4 sessions/week)</mat-option>
+              <mat-option value="high">High (5+ sessions/week)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Stress load</mat-label>
+            <mat-select formControlName="stressLevel">
+              <mat-option value="low">Low</mat-option>
+              <mat-option value="moderate">Moderate</mat-option>
+              <mat-option value="high">High</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="nutritionGroup">
+      <form [formGroup]="nutritionGroup">
+        <ng-template matStepLabel>Fuel the plan</ng-template>
+        <div class="step-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>Diet preference</mat-label>
+            <mat-select formControlName="dietPreference">
+              <mat-option *ngFor="let option of dietOptions" [value]="option.value">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Daily calorie target</mat-label>
+            <input matInput type="number" formControlName="calorieTarget" placeholder="2200" />
+            <span matSuffix>kcal</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Restrictions (optional)</mat-label>
+            <input matInput formControlName="dietaryRestrictions" placeholder="Shellfish, dairy, etc." />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Flavor preferences</mat-label>
+            <textarea matInput rows="2" formControlName="dietaryPreferences" placeholder="Mediterranean, quick breakfasts"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="step-actions">
+          <button mat-stroked-button matStepperPrevious>Back</button>
+          <button mat-raised-button color="accent" type="button" [disabled]="saving" (click)="submit(stepper)">
+            {{ saving ? 'Saving…' : 'Save & build my plan' }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-card>

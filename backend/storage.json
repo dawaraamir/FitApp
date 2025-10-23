@@ -6,7 +6,7 @@
           "day": "Monday",
           "window": "midday",
           "focus": "Heavy strength",
-          "durationMinutes": 45,
+          "durationMinutes": 50,
           "equipment": "full gym",
           "intensity": "high"
         },
@@ -14,7 +14,7 @@
           "day": "Tuesday",
           "window": "evening",
           "focus": "Accessory build",
-          "durationMinutes": 40,
+          "durationMinutes": 45,
           "equipment": "full gym",
           "intensity": "moderate"
         },
@@ -22,7 +22,7 @@
           "day": "Wednesday",
           "window": "midday",
           "focus": "Recovery primer",
-          "durationMinutes": 40,
+          "durationMinutes": 45,
           "equipment": "full gym",
           "intensity": "easy"
         },
@@ -30,7 +30,7 @@
           "day": "Thursday",
           "window": "evening",
           "focus": "Heavy strength",
-          "durationMinutes": 45,
+          "durationMinutes": 50,
           "equipment": "full gym",
           "intensity": "high"
         },
@@ -38,7 +38,7 @@
           "day": "Friday",
           "window": "midday",
           "focus": "Accessory build",
-          "durationMinutes": 40,
+          "durationMinutes": 45,
           "equipment": "full gym",
           "intensity": "moderate"
         }
@@ -47,7 +47,206 @@
         "summary": "Plan built around full gym sessions in your midday window. Short-term focus: Add 5 lbs lean mass. Long-term aim: Compete in obstacle race.",
         "recoveryTip": "Low stress. Keep one mobility check-in to stay ahead of tightness.",
         "mealAlignment": "Meals lean toward standard options with matching protein targets. Highlighting favorites: High protein bowls."
-      }
+      },
+      "insights": [
+        "Readiness is elevated \u2014 consider adding one bonus finisher if energy stays high.",
+        "Stress tracking low \u2014 template leans into progressive overload blocks."
+      ]
+    },
+    "0901722bd5a44c205c89207f1a5733a45010977b": {
+      "sessions": [
+        {
+          "day": "Monday",
+          "window": "early morning",
+          "focus": "Metabolic circuit",
+          "durationMinutes": 35,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Tuesday",
+          "window": "late afternoon",
+          "focus": "Core stability + posture",
+          "durationMinutes": 35,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Wednesday",
+          "window": "weekend focus",
+          "focus": "Cardio interval",
+          "durationMinutes": 40,
+          "equipment": "bodyweight",
+          "intensity": "high"
+        },
+        {
+          "day": "Thursday",
+          "window": "early morning",
+          "focus": "Metabolic circuit",
+          "durationMinutes": 35,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Friday",
+          "window": "late afternoon",
+          "focus": "Core stability + posture",
+          "durationMinutes": 35,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Saturday",
+          "window": "weekend focus",
+          "focus": "Cardio interval",
+          "durationMinutes": 40,
+          "equipment": "bodyweight",
+          "intensity": "high"
+        },
+        {
+          "day": "Flex Day",
+          "window": "On-demand",
+          "focus": "Recovery flow + guided breath",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "easy"
+        }
+      ],
+      "notes": {
+        "summary": "Plan built around bodyweight sessions in your early morning window. Short-term focus: Drop 10 lbs for summer travel. Long-term aim: Improve stamina on client trips.",
+        "recoveryTip": "High stress flagged\u2014add an extra mobility or breath session after dinner.",
+        "mealAlignment": "Meals lean toward pescatarian options with matching protein targets. Avoiding: dairy. Highlighting favorites: Seafood, bowls."
+      },
+      "insights": [
+        "Readiness is elevated \u2014 consider adding one bonus finisher if energy stays high.",
+        "Stress level high \u2014 layer in breath work and swap one session for restorative flow.",
+        "Recovery buffer added to protect energy budget this week."
+      ]
+    },
+    "d053b0bfe9ce545f6a87ea992ee2f76b92abdc0b": {
+      "sessions": [
+        {
+          "day": "Monday",
+          "window": "early morning",
+          "focus": "Metabolic circuit",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Tuesday",
+          "window": "midday",
+          "focus": "Strength maintenance",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Wednesday",
+          "window": "early morning",
+          "focus": "Cardio interval",
+          "durationMinutes": 25,
+          "equipment": "bodyweight",
+          "intensity": "high"
+        },
+        {
+          "day": "Thursday",
+          "window": "midday",
+          "focus": "Metabolic circuit",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Friday",
+          "window": "early morning",
+          "focus": "Strength maintenance",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Flex Day",
+          "window": "On-demand",
+          "focus": "Recovery flow + guided breath",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "easy"
+        }
+      ],
+      "notes": {
+        "summary": "Plan built around bodyweight sessions in your early morning window.",
+        "recoveryTip": "High stress flagged\u2014add an extra mobility or breath session after dinner.",
+        "mealAlignment": "Meals lean toward standard options with matching protein targets."
+      },
+      "insights": [
+        "Latest readiness flagged under 60 \u2014 keep the first session lighter and extend cooldowns.",
+        "Sleep dipped below 6 hours. Keep today mobility-heavy and schedule an earlier cutoff tonight.",
+        "Stress level high \u2014 layer in breath work and swap one session for restorative flow.",
+        "Recovery buffer added to protect energy budget this week."
+      ]
+    },
+    "8123a16b9805c3b26bf6ddf9a52d1d79e56914df": {
+      "sessions": [
+        {
+          "day": "Monday",
+          "window": "midday",
+          "focus": "Strength balance",
+          "durationMinutes": 25,
+          "equipment": "dumbbells",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Tuesday",
+          "window": "evening",
+          "focus": "Mobility + core",
+          "durationMinutes": 25,
+          "equipment": "dumbbells",
+          "intensity": "easy"
+        },
+        {
+          "day": "Wednesday",
+          "window": "midday",
+          "focus": "Conditioning mix",
+          "durationMinutes": 25,
+          "equipment": "dumbbells",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Thursday",
+          "window": "evening",
+          "focus": "Strength balance",
+          "durationMinutes": 25,
+          "equipment": "dumbbells",
+          "intensity": "moderate"
+        },
+        {
+          "day": "Friday",
+          "window": "midday",
+          "focus": "Mobility + core",
+          "durationMinutes": 25,
+          "equipment": "dumbbells",
+          "intensity": "easy"
+        },
+        {
+          "day": "Flex Day",
+          "window": "On-demand",
+          "focus": "Recovery flow + guided breath",
+          "durationMinutes": 20,
+          "equipment": "bodyweight",
+          "intensity": "easy"
+        }
+      ],
+      "notes": {
+        "summary": "Plan built around dumbbells sessions in your midday window.",
+        "recoveryTip": "Moderate stress. Mix in a short walk after lunch to reset energy.",
+        "mealAlignment": "Meals lean toward standard options with matching protein targets."
+      },
+      "insights": [
+        "Latest readiness flagged under 60 \u2014 keep the first session lighter and extend cooldowns.",
+        "Sleep dipped below 6 hours. Keep today mobility-heavy and schedule an earlier cutoff tonight.",
+        "Recovery buffer added to protect energy budget this week."
+      ]
     }
   },
   "wellness": [
@@ -94,6 +293,42 @@
       "sleepHours": null,
       "readiness": null,
       "energyLevel": "steady",
+      "comment": null
+    },
+    {
+      "timestamp": "2025-10-23T00:25:58.984Z",
+      "source": "apple_health",
+      "steps": 9200,
+      "sleepHours": 7.6,
+      "readiness": 82,
+      "energyLevel": "steady",
+      "comment": "Office day, light walk at lunch."
+    },
+    {
+      "timestamp": "2025-10-22T00:25:58.984Z",
+      "source": "apple_health",
+      "steps": 11400,
+      "sleepHours": 8.1,
+      "readiness": 88,
+      "energyLevel": "charged",
+      "comment": null
+    },
+    {
+      "timestamp": "2024-10-02T07:00:00Z",
+      "source": null,
+      "steps": null,
+      "sleepHours": 5.5,
+      "readiness": 55,
+      "energyLevel": null,
+      "comment": null
+    },
+    {
+      "timestamp": "2024-10-02T07:00:00Z",
+      "source": null,
+      "steps": null,
+      "sleepHours": 5.5,
+      "readiness": 55,
+      "energyLevel": null,
       "comment": null
     }
   ]

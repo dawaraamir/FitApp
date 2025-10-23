@@ -82,11 +82,27 @@
   font-weight: 700;
   color: #1f2a37;
 }
+.summary-card .value.macro {
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
 
 .highlight-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.rotation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rotation mat-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .tips-card {
@@ -198,6 +214,52 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
+}
+
+.day-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.28);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #334155;
+}
+
+.coach-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.coach-tip mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.macro-summary {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+@media (max-width: 640px) {
+  .controls-card {
+    padding: 20px;
+  }
+
+  .summary-card {
+    padding: 20px;
+  }
+
+  .day-card {
+    padding: 20px;
+  }
+
+  .summary-card .value {
+    font-size: 1.4rem;
+  }
 }
 
 mat-chip {

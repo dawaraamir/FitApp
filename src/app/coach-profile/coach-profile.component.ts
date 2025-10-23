@@ -197,6 +197,10 @@ export class CoachProfileComponent implements OnInit {
     this.populateFromProfile(this.coachProfileService.getProfile());
   }
 
+  onOnboardingComplete(): void {
+    this.populateFromProfile(this.coachProfileService.getProfile());
+  }
+
   private populateFromProfile(profile: CoachProfile | null): void {
     if (!profile) {
       return;

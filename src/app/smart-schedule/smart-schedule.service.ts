@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CoachProfile } from '../coach-profile/coach-profile.service';
+import { environment } from '../../environments/environment';
+import { MealPlanResponse } from '../meal-plan/meal-plan.model';
 
-const SCHEDULE_ENDPOINT = 'http://localhost:8080/fit/schedule';
-const WELLNESS_ENDPOINT = 'http://localhost:8080/fit/wellness-sync';
-const WELLNESS_IMPORT_ENDPOINT = 'http://localhost:8080/fit/wellness-sync/import';
+const API_BASE = environment.apiBaseUrl;
+const SCHEDULE_ENDPOINT = `${API_BASE}/schedule`;
+const WELLNESS_ENDPOINT = `${API_BASE}/wellness-sync`;
+const WELLNESS_IMPORT_ENDPOINT = `${API_BASE}/wellness-sync/import`;
+const RECOMMENDATION_ENDPOINT = `${API_BASE}/coach/recommendation`;
 
 export interface ScheduledSession {
   day: string;
@@ -25,6 +29,7 @@ export interface ScheduleNotes {
 export interface ScheduleResponse {
   sessions: ScheduledSession[];
   notes: ScheduleNotes;
+  insights: string[];
 }
 
 export interface WellnessMetricPayload {
@@ -35,6 +40,19 @@ export interface WellnessMetricPayload {
   readiness?: number | null;
   energyLevel?: string | null;
   comment?: string | null;
+}
+
+export interface CoachAction {
+  headline: string;
+  description: string;
+}
+
+export interface CoachRecommendation {
+  profileHash: string;
+  schedule: ScheduleResponse;
+  mealPlan: MealPlanResponse;
+  takeaways: string[];
+  nextActions: CoachAction[];
 }
 
 @Injectable({
@@ -63,6 +81,17 @@ export class SmartScheduleService {
     return this.http.post<{ status: string; count: string }>(WELLNESS_IMPORT_ENDPOINT, {
       source,
       entries,
+    });
+  }
+
+  generateCoachRecommendation(
+    profile: CoachProfile,
+    mealPlanOverrides?: Partial<{ goal: string; diet: string; days: number; calories?: number | null }>
+  ): Observable<CoachRecommendation> {
+    return this.http.post<CoachRecommendation>(RECOMMENDATION_ENDPOINT, {
+      schedule: this.toPayload(profile),
+      mealPlan: mealPlanOverrides,
+      focusAreas: [profile.stressLevel, profile.goal, profile.workStyle].filter(Boolean),
     });
   }
 
