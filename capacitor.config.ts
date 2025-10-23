@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
   appId: 'com.dawarpower.app',
   appName: 'Dawar Power',
   webDir: 'dist/fitness-app',
-  bundledWebRuntime: false,
   server: {
     url: process.env.CAP_SERVER_URL ?? undefined,
     cleartext: true,
